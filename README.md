@@ -1,18 +1,18 @@
-# sust**AI**n: The Environmentally-Friendly AI Wrapper
+# SUSTAIN: The Environmentally-Friendly AI Wrapper
 
 ## Overview
-sust**AI**n is an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. By filtering out irrelevant words and phrases from prompts and limiting responses to essential outputs, sust**AI**n minimizes the number of tokens sent to and received from the AI, saving energy and boosting performance.
+SUSTAIN is an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. By filtering out irrelevant words and phrases from prompts and limiting responses to essential outputs, SUSTAIN minimizes the number of tokens sent to and received from the AI, saving energy and boosting performance.
 
 Our mission is to deliver a sustainable, high-efficiency alternative to major large language models (LLMs) while maintaining powerful AI-driven results.
 
 ---
 
-## Why sust**AI**n?
+## Why SUSTAIN?
 
 ### **Environmental Sustainability**
 - Traditional AI systems expend significant energy processing large amounts of token data, much of which is redundant or irrelevant (e.g., greetings, fillers, politeness).
-- sust**AI**n significantly reduces token usage, minimizing the carbon footprint of AI queries.
-- By promoting shorter, optimized inputs and outputs, sust**AI**n contributes to a greener AI ecosystem.
+- SUSTAIN significantly reduces token usage, minimizing the carbon footprint of AI queries.
+- By promoting shorter, optimized inputs and outputs, SUSTAIN contributes to a greener AI ecosystem.
 
 ### **Enhanced Productivity**
 - Get results faster with condensed, actionable responses.
@@ -75,13 +75,13 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
 
 ## Usage Example
 ```python
-from sustain import sustAIn
+from sustain import SUSTAIN
 
-# Initialize sustAIn
-sustAIn = sustAIn(api_key="your_openai_api_key")
+# Initialize SUSTAIN
+SUSTAIN = SUSTAIN(api_key="your_openai_api_key")
 
 # Provide a verbose user input
-response = sustAIn.get_response("Hello, could you please brainstorm some key traits a leader should have?")
+response = SUSTAIN.get_response("Hello, could you please brainstorm some key traits a leader should have?")
 
 # Output
 print(response)  # Returns a token-efficient response: "Integrity, vision, empathy, resilience"
@@ -90,7 +90,7 @@ print(response)  # Returns a token-efficient response: "Integrity, vision, empat
 ---
 
 ## Configuration
-sust**AI**n offers flexible configurations to suit different workflows:
+SUSTAIN offers flexible configurations to suit different workflows:
 - **Max Tokens:** Set the maximum response length.
 - **Summarization Level:** Control how much context is trimmed from the user input.
 - **Caching Duration:** Define how long responses are stored to minimize repeat API calls.
