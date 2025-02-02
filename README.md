@@ -1,4 +1,5 @@
 # 🌱 SUSTAIN: The Environmentally-Friendly AI Wrapper 🌱
+![474891040_683892027299508_4731073699058958281_n](https://github.com/user-attachments/assets/bbb7337a-dcd5-4dd6-bded-3a264c41af46)
 
 ## Overview
 SUSTAIN is an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. By filtering out irrelevant words and phrases from prompts and limiting responses to essential outputs, SUSTAIN minimizes the number of tokens sent to and received from the AI, saving energy and boosting performance.
