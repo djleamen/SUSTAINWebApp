@@ -50,7 +50,7 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
 ## Installation
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/ecoprompt.git
+   git clone https://github.com/your-username/SUSTAIN.git
    cd sustain
    ```
 
