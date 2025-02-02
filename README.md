@@ -66,7 +66,7 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
      OPENAI_API_KEY=your_openai_api_key
      ```
 
-4. **Run EcoPrompt:**
+4. **Run SUSTAIN:**
    ```bash
    python main.py
    ```
