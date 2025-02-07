@@ -136,4 +136,5 @@ For questions or suggestions, feel free to reach out to us:
    - Tomasz Puzio tomasz.puzio@ontariotechu.net
    - DJ Leamen dj.leamen@ontariotechu.net
    - Juliana Losada Prieto juliana.losadaprieto@ontariotechu.net
+
 Let’s build a more sustainable AI future together!
