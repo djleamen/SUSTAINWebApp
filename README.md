@@ -1,5 +1,5 @@
 # 🌱 SUSTAIN: The Environmentally-Friendly AI Wrapper 🌱
-![474891040_683892027299508_4731073699058958281_n](https://github.com/user-attachments/assets/bbb7337a-dcd5-4dd6-bded-3a264c41af46)
+![SUSTAIN Logo](https://github.com/user-attachments/assets/bbb7337a-dcd5-4dd6-bded-3a264c41af46)
 
 ## Overview
 SUSTAIN is an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. By filtering out irrelevant words and phrases from prompts and limiting responses to essential outputs, SUSTAIN minimizes the number of tokens sent to and received from the AI, saving energy and boosting performance.
@@ -33,7 +33,8 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
 ### **2. Short-Form AI Responses**
 - Limits responses to concise, actionable outputs using optimized `max_tokens` settings.
 - Example Output:
-  - **Input:** "list traits - leader"  
+  - **Input:** "Can you list the traits of a leader?" 
+    - Refined input: "list traits - leader" 
   - **Output:** "Integrity, vision, empathy, resilience, communication"
 
 ### **3. Caching for Repeated Queries**
@@ -74,15 +75,36 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
 
 ---
 
+## Running the Chat GUI
+
+To launch the chat GUI where you can interact with SUSTAIN directly:
+
+1. **Ensure you have installed all dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Add the SUSTAIN logo:**
+   - Place the `sustain_logo.png` file in the same directory as `chat_gui.py`.
+
+3. **Run the chat GUI:**
+   ```bash
+   python chat_gui.py
+   ```
+
+This will open a window where you can input your queries and receive responses from SUSTAIN.
+
+---
+
 ## Usage Example
 ```python
 from sustain import SUSTAIN
 
 # Initialize SUSTAIN
-SUSTAIN = SUSTAIN(api_key="your_openai_api_key")
+sustain = SUSTAIN(api_key="your_openai_api_key")
 
 # Provide a verbose user input
-response = SUSTAIN.get_response("Hello, could you please brainstorm some key traits a leader should have?")
+response = sustain.get_response("Hello, could you please brainstorm some key traits a leader should have?")
 
 # Output
 print(response)  # Returns a token-efficient response: "Integrity, vision, empathy, resilience"
@@ -116,6 +138,6 @@ To contribute:
 
 ## Contact
 For questions or suggestions, feel free to reach out to us:
-- **Project Team:** 
+- **Project Team:** sustain-team@example.com
 
 Let’s build a more sustainable AI future together!
