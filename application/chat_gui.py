@@ -57,7 +57,15 @@ class ChatApp:
             raise ValueError("API key not found. Please set the OPENAI_API_KEY environment variable.")
         self.sustain = SUSTAIN(api_key=self.api_key)
         self.display_settings_message("Welcome to SUSTAIN Chat! Ask me: \"What is SUSTAIN?\" to learn more.")
-    
+        
+        # Initialize token savings
+        self.total_percentage_saved = 0
+        self.message_count = 0
+        
+        # Add a label to display token percentage saved
+        self.token_savings_label = tk.Label(root, text="Token savings: 0.00%", fg="green")
+        self.token_savings_label.pack(pady=5)
+
     # Process user input, send request to OpenAI API, and display response
     def send_message(self, event):
         user_input = self.entry.get()
@@ -67,6 +75,12 @@ class ChatApp:
             self.display_message("\nSUSTAIN: " + response)
             self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!")
             self.entry.delete(0, tk.END)
+            
+            # Update token savings
+            self.message_count += 1
+            self.total_percentage_saved += percentage_saved
+            average_savings = self.total_percentage_saved / self.message_count
+            self.token_savings_label.config(text=f"Token savings: {average_savings:.2f}%")
 
     # Display a message in the chat area
     def display_message(self, message):

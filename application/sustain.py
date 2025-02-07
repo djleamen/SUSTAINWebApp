@@ -29,12 +29,6 @@ class SUSTAIN:
                 0
             )
         
-        # Check for input length requirements
-        if user_input > 1000:
-            return "Error: The maximum input length is 1000 tokens. Please provide a shorter input.", 0
-        if len(user_input.split()) < 5:
-            return "Error: The minimum input length is 5 tokens. Please provide a longer input.", 0
-        
         optimized_input, tokens_saved = self.optimize_prompt(user_input)
         # Send request to OpenAI API
         try:
