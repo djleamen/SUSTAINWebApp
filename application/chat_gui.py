@@ -63,7 +63,7 @@ class ChatApp:
         self.message_count = 0
         
         # Add a label to display token percentage saved
-        self.token_savings_label = tk.Label(root, text="Token savings: 0.00%", fg="green")
+        self.token_savings_label = tk.Label(root, text="Average token savings: 0.00%. Thank you for going green!", fg="green")
         self.token_savings_label.pack(pady=5)
 
     # Process user input, send request to OpenAI API, and display response
@@ -80,7 +80,7 @@ class ChatApp:
             self.message_count += 1
             self.total_percentage_saved += percentage_saved
             average_savings = self.total_percentage_saved / self.message_count
-            self.token_savings_label.config(text=f"Token savings: {average_savings:.2f}%")
+            self.token_savings_label.config(text=f"Average token savings: {average_savings:.2f}%. Thank you for going green!")
 
     # Display a message in the chat area
     def display_message(self, message):
