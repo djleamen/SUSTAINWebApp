@@ -1,44 +1,64 @@
+'''
+Description: This file is responsible for building the chat application.
+
+The main function creates a Tkinter window and initializes the ChatApp class.
+The ChatApp class creates a GUI window with a logo, chat area, and entry field.
+It loads the OpenAI API key from the .env file and initializes the SUSTAIN class.
+The send_message method processes user input, sends a request to the OpenAI API,
+and displays the response in the chat area.
+
+The chat_gui class contains the following methods:
+1. __init__(self, root): Initializes the chat application with a logo, chat area, and entry field.
+2. send_message(self, event): Processes user input, sends a request to the OpenAI API, and displays the response.
+3. display_message(self, message): Displays a message in the chat area.
+4. display_settings_message(self, message): Displays a settings message in the chat area.
+
+'''
+
 import os
 import tkinter as tk
 from tkinter import scrolledtext, PhotoImage
 from dotenv import load_dotenv
 from sustain import SUSTAIN
-from PIL import Image, ImageTk  # Add this import
+from PIL import Image, ImageTk
 
 # Load environment variables from .env file
 load_dotenv()
 
+# Create a chat application using Tkinter
 class ChatApp:
     def __init__(self, root):
         self.root = root
         self.root.title("SUSTAIN Chat")
 
+        # Load and display the SUSTAIN logo
         script_dir = os.path.dirname(__file__)
-        original_logo = Image.open("sustain_logo.png")  # Load SUSTAIN logo
+        original_logo = Image.open("sustain_logo.png")
         
         # Resize SUSTAIN logo while maintaining aspect ratio
         max_size = (100, 100)
-        original_logo.thumbnail(max_size, Image.LANCZOS)  # Maintain aspect ratio
+        original_logo.thumbnail(max_size, Image.LANCZOS)
         self.logo = ImageTk.PhotoImage(original_logo)
         
+        # Display SUSTAIN logo in the chat window
         self.logo_label = tk.Label(root, image=self.logo)
         self.logo_label.pack(pady=10)
         
+        # Create a chat area and entry field
         self.chat_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, state='disabled', height=20)
         self.chat_area.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
-        
         self.entry = tk.Entry(root)
         self.entry.pack(padx=10, pady=10, fill=tk.X, expand=True)
         self.entry.bind("<Return>", self.send_message)
         
+        # Initialize the SUSTAIN API
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise ValueError("API key not found. Please set the OPENAI_API_KEY environment variable.")
-        
         self.sustain = SUSTAIN(api_key=self.api_key)
         self.display_settings_message("Welcome to SUSTAIN Chat! Ask me: \"What is SUSTAIN?\" to learn more.")
     
-        
+    # Process user input, send request to OpenAI API, and display response
     def send_message(self, event):
         user_input = self.entry.get()
         if user_input:
@@ -48,12 +68,14 @@ class ChatApp:
             self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!")
             self.entry.delete(0, tk.END)
 
+    # Display a message in the chat area
     def display_message(self, message):
         self.chat_area.config(state='normal')
         self.chat_area.insert(tk.END, message + "\n")
         self.chat_area.config(state='disabled')
         self.chat_area.yview(tk.END)
 
+    # Display a settings message in the chat area
     def display_settings_message(self, message):
         self.chat_area.config(state='normal')
         self.chat_area.insert(tk.END, message + "\n", "grey")
@@ -61,6 +83,7 @@ class ChatApp:
         self.chat_area.config(state='disabled')
         self.chat_area.yview(tk.END)
 
+# Run the chat application
 if __name__ == "__main__":
     root = tk.Tk()
     app = ChatApp(root)

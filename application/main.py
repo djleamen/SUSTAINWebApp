@@ -1,3 +1,8 @@
+'''
+Description: This file is responsible for running the chat application.
+
+'''
+
 import os
 import tkinter as tk
 from dotenv import load_dotenv
@@ -6,6 +11,7 @@ import spacy
 
 load_dotenv()
 
+# Main function to run the chat application
 def main():
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
