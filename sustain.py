@@ -28,12 +28,12 @@ class SUSTAIN:
 
     def optimize_prompt(self, prompt):
         doc = self.nlp(prompt)
-        words_to_remove = ["Hello", "please", "Thank you", "could", "would", "kindly", "just", "the"]
+        words_to_remove = ["Hello", "please", "Thank you", "Please", "thank you", "thanks", "Thanks", "Can you", "can you", "could", "would", "kindly", "just", "the", ".", ",", ";", "?"]
         optimized_prompt = ' '.join([token.text for token in doc if token.text.lower() not in words_to_remove])
         
         # Additional optimization techniques
         optimized_prompt = optimized_prompt.replace("I am", "I'm").replace("do not", "don't")
-        optimized_prompt += " Respond concisely."
+        optimized_prompt += " Respond <30 words"
         
         original_tokens = len(prompt.split())
         optimized_tokens = len(optimized_prompt.split())

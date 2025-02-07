@@ -84,19 +84,19 @@ To launch the chat GUI where you can interact with SUSTAIN directly:
    pip install -r requirements.txt
    ```
 
-2. **Add the SUSTAIN logo:**
+2. **Ensure the SUSTAIN logo is in the right spot:**
    - Place the `sustain_logo.png` file in the same directory as `chat_gui.py`.
 
-3. **Run the chat GUI:**
+3. **Run the main file:**
    ```bash
-   python chat_gui.py
+   python main.py
    ```
 
 This will open a window where you can input your queries and receive responses from SUSTAIN.
 
 ---
 
-## Usage Example
+## Usage Example in Python
 ```python
 from sustain import SUSTAIN
 
@@ -121,10 +121,8 @@ SUSTAIN offers flexible configurations to suit different workflows:
 ---
 
 ## Roadmap
-- [ ] Integrate with task management tools (Notion, Trello, Slack)
 - [ ] Implement dynamic summarization based on context length
-- [ ] Develop a browser extension for on-the-go token optimization
-- [ ] Provide additional eco-feedback on overall token savings
+- [x] Provide additional eco-feedback on overall token savings
 
 ---
 
@@ -138,6 +136,9 @@ To contribute:
 
 ## Contact
 For questions or suggestions, feel free to reach out to us:
-- **Project Team:** sustain-team@example.com
-
+- **Project Team:**
+   - Klein Cafa kleinlester.cafa@ontariotechu.net
+   - Tomasz Puzio tomasz.puzio@ontariotechu.net
+   - DJ Leamen dj.leamen@ontariotechu.net
+   - Juliana Losada Prieto juliana.losadaprieto@ontariotechu.net
 Let’s build a more sustainable AI future together!
