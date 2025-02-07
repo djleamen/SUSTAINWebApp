@@ -37,8 +37,10 @@ class SUSTAIN:
                 messages=[{"role": "user", "content": optimized_input}],
                 max_tokens=100 
             )
-            percentage_saved = self.calculate_percentage_saved(len(user_input.split()), tokens_saved)
-            return response.choices[0].message.content.strip().split('.')[0], percentage_saved  # Return response and percentage saved
+            response_text = response.choices[0].message.content.strip().split('.')[0]
+            response_tokens = len(response_text.split())
+            percentage_saved = self.calculate_percentage_saved(len(optimized_input.split()), response_tokens)
+            return response_text, percentage_saved  # Return response and percentage saved
         except OpenAI.error.OpenAIError as e:
             if e.code == 'insufficient_quota':
                 return "Error: The API quota has been exceeded. Please contact SUSTAIN.", 0
@@ -50,12 +52,12 @@ class SUSTAIN:
     # Remove irrelevant words and phrases from the prompt
     def optimize_prompt(self, prompt):
         doc = self.nlp(prompt)
-        words_to_remove = ["Hello", "please", "Thank you", "Please", "thank you", "thanks", "Thanks", "Can you", "can you", "could", "would", "kindly", "just", "the", ".", ",", ";", "?"]
+        words_to_remove = ["Hello", "please", "Thank you", "Please", "thank you", "thanks", "Thanks", "Can you", "can you", "could you", "Could you", "could", "would", "kindly", "just", "the", ".", ",", ";", "?"]
         optimized_prompt = ' '.join([token.text for token in doc if token.text.lower() not in words_to_remove])
         
         # Additional optimization techniques
         optimized_prompt = optimized_prompt.replace("I am", "I'm").replace("do not", "don't")
-        optimized_prompt += " Respond <30 words"
+        optimized_prompt += " in <30 words"
         
         original_tokens = len(prompt.split())
         optimized_tokens = len(optimized_prompt.split())
