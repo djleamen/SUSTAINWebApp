@@ -37,14 +37,7 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
     - Refined input: "list traits - leader" 
   - **Output:** "Integrity, vision, empathy, resilience, communication"
 
-### **3. Caching for Repeated Queries**
-- Frequently requested tasks (like summarizations or brainstorming lists) are cached to avoid redundant API calls.
-- Improves speed and reduces token waste.
-
-### **4. Customizable Prompt and Response Lengths**
-- Allow users to toggle between brief (default) and expanded responses, based on task needs.
-
-### **5. Environmentally-Aware Feedback**
+### **3. Environmentally-Aware Feedback**
 - Track token savings and display eco-friendly metrics to users, e.g., "This request saved 30% of token usage compared to traditional AI!"
 
 ---
@@ -116,13 +109,15 @@ print(response)  # Returns a token-efficient response: "Integrity, vision, empat
 SUSTAIN offers flexible configurations to suit different workflows:
 - **Max Tokens:** Set the maximum response length.
 - **Summarization Level:** Control how much context is trimmed from the user input.
-- **Caching Duration:** Define how long responses are stored to minimize repeat API calls.
 
 ---
 
 ## Roadmap
 - [ ] Implement dynamic summarization based on context length
-- [x] Provide additional eco-feedback on overall token savings
+- [ ] Provide additional eco-feedback on overall token savings
+- [ ] Add support for more languages and spaCy models
+- [ ] Implement caching for frequently requested queries to reduce API calls
+- [ ] Enhance the GUI with more user-friendly features and customization options
 
 ---
 
