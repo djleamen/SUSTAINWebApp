@@ -9,6 +9,14 @@ class SUSTAIN:
         self.nlp = spacy.load("en_core_web_sm")  # Load spaCy model
 
     def get_response(self, user_input):
+        # Check for specific queries about SUSTAIN
+        if user_input in ["What is SUSTAIN?"]:
+            return (
+                "I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. "
+                "I filter out irrelevant words and phrases from prompts and limit responses to essential outputs, minimizing the number of tokens used.",
+                0
+            )
+        
         optimized_input, tokens_saved = self.optimize_prompt(user_input)
         try:
             response = self.client.chat.completions.create(

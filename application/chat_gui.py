@@ -12,9 +12,11 @@ class ChatApp:
     def __init__(self, root):
         self.root = root
         self.root.title("SUSTAIN Chat")
+
+        script_dir = os.path.dirname(__file__)
+        original_logo = Image.open("sustain_logo.png")  # Load SUSTAIN logo
         
         # Resize SUSTAIN logo while maintaining aspect ratio
-        original_logo = Image.open("sustain_logo.png")
         max_size = (100, 100)
         original_logo.thumbnail(max_size, Image.LANCZOS)  # Maintain aspect ratio
         self.logo = ImageTk.PhotoImage(original_logo)
@@ -34,6 +36,8 @@ class ChatApp:
             raise ValueError("API key not found. Please set the OPENAI_API_KEY environment variable.")
         
         self.sustain = SUSTAIN(api_key=self.api_key)
+        self.display_settings_message("Welcome to SUSTAIN Chat! Ask me: \"What is SUSTAIN?\" to learn more.")
+    
         
     def send_message(self, event):
         user_input = self.entry.get()
@@ -41,7 +45,7 @@ class ChatApp:
             self.display_message("You: " + user_input)
             response, percentage_saved = self.sustain.get_response(user_input)
             self.display_message("\nSUSTAIN: " + response)
-            self.display_token_saving_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!")
+            self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!")
             self.entry.delete(0, tk.END)
 
     def display_message(self, message):
@@ -50,7 +54,7 @@ class ChatApp:
         self.chat_area.config(state='disabled')
         self.chat_area.yview(tk.END)
 
-    def display_token_saving_message(self, message):
+    def display_settings_message(self, message):
         self.chat_area.config(state='normal')
         self.chat_area.insert(tk.END, message + "\n", "grey")
         self.chat_area.tag_config("grey", foreground="grey")
