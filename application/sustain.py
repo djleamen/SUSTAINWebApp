@@ -1,8 +1,12 @@
 import os
+import logging
 from openai import OpenAI
 import spacy
 import tiktoken
 import re
+
+# Configure logging
+logging.basicConfig(filename='sustain.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class SUSTAIN:
     def __init__(self, api_key):
@@ -11,33 +15,30 @@ class SUSTAIN:
         self.nlp = spacy.load("en_core_web_sm")
 
     def get_response(self, user_input):
-        # Optimize the user input and calculate token savings
         optimized_input = self.optimize_text(user_input)
         original_tokens = self.count_tokens(user_input)
         optimized_tokens = self.count_tokens(optimized_input)
-
-        # Calculate token savings based on input optimization (NOT response)
         tokens_saved = original_tokens - optimized_tokens
         percentage_saved = (tokens_saved / original_tokens) * 100 if original_tokens > 0 else 0
 
-        # Ask for a concise response but ignore it for savings calculation
         try:
-         response = self.client.chat.completions.create(
-              model="gpt-3.5-turbo",
-              messages=[{"role": "user", "content": f"{optimized_input} in <20 words."}],
-              max_tokens=50
-         )
-         response_text = response.choices[0].message.content.strip()
-
-         return response_text, percentage_saved
+            response = self.client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": f"{optimized_input} in <20 words."}],
+                max_tokens=50
+            )
+            response_text = response.choices[0].message.content.strip()
+            logging.info(f"Response: {response_text}, Tokens saved: {percentage_saved:.2f}%")
+            return response_text, percentage_saved
 
         except OpenAI.error.OpenAIError as e:
-          if e.code == 'insufficient_quota':
-               return "Error: The API quota has been exceeded. Please contact SUSTAIN.", 0
-          elif e.code == 'model_not_found':
+            logging.error(f"OpenAIError: {str(e)}")
+            if e.code == 'insufficient_quota':
+                return "Error: The API quota has been exceeded. Please contact SUSTAIN.", 0
+            elif e.code == 'model_not_found':
                 return "Error: The specified model does not exist or you do not have access to it.", 0
-          else:
-              return f"Error: {str(e)}", 0
+            else:
+                return f"Error: {str(e)}", 0
 
     def trim_response(self, response_text):
         # Enforce 20 words max to keep responses concise

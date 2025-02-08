@@ -17,7 +17,7 @@ The chat_gui class contains the following methods:
 
 import os
 import tkinter as tk
-from tkinter import scrolledtext, PhotoImage
+from tkinter import scrolledtext, PhotoImage, filedialog
 from dotenv import load_dotenv
 from sustain import SUSTAIN
 from PIL import Image, ImageTk
@@ -30,6 +30,18 @@ class ChatApp:
     def __init__(self, root):
         self.root = root
         self.root.title("SUSTAIN Chat")
+
+        # Create a menu bar
+        self.menu_bar = tk.Menu(self.root)
+        self.root.config(menu=self.menu_bar)
+
+        # Add a File menu with a Save option
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.file_menu.add_command(label="Save Chat", command=self.save_chat)
+        
+        # Add a Clear Chat option to the File menu
+        self.file_menu.add_command(label="Clear Chat", command=self.clear_chat)
 
         # Load and display the SUSTAIN logo
         script_dir = os.path.dirname(__file__)
@@ -105,6 +117,25 @@ class ChatApp:
         self.chat_area.tag_config("grey", foreground="grey")
         self.chat_area.config(state='disabled')
         self.chat_area.yview(tk.END)
+
+    # Save the chat history to a text file
+    def save_chat(self):
+        chat_history = self.chat_area.get("1.0", tk.END).strip()
+        if chat_history:
+            # Ask the user where to save the file
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", 
+                                                     filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+            if file_path:
+                with open(file_path, "w") as file:
+                    file.write(chat_history)
+                self.display_settings_message(f"Chat history saved to {file_path}")
+
+    # Clear the chat history
+    def clear_chat(self):
+        self.chat_area.config(state='normal')
+        self.chat_area.delete("1.0", tk.END)
+        self.chat_area.config(state='disabled')
+        self.display_settings_message("Chat history cleared.")
 
 # Run the chat application
 if __name__ == "__main__":
