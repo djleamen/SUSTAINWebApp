@@ -2,9 +2,9 @@
 ![SUSTAIN Logo](https://github.com/user-attachments/assets/bbb7337a-dcd5-4dd6-bded-3a264c41af46)
 
 ## Overview
-SUSTAIN is an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. By filtering out irrelevant words and phrases from prompts and limiting responses to essential outputs, SUSTAIN minimizes the number of tokens sent to and received from the AI, saving energy and boosting performance.
+SUSTAIN is an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. By filtering out irrelevant words and phrases from prompts, SUSTAIN minimizes the number of tokens sent to and received from the AI, saving energy and boosting performance.
 
-Our mission is to deliver a sustainable, high-efficiency alternative to major large language models (LLMs) while maintaining powerful AI-driven results.
+Our mission is to deliver a sustainable, high-efficiency alternative to major large language models (LLMs) while maintaining powerful AI-driven results.🔋
 
 ---
 
@@ -18,8 +18,7 @@ Our mission is to deliver a sustainable, high-efficiency alternative to major la
 ### **Enhanced Productivity**
 - Get results faster with condensed, actionable responses.
 - Eliminate unnecessary verbose outputs by default, with the option to expand details when needed.
-- Integrate seamlessly with task management tools like **Notion**, **Trello**, and **Slack** for productivity-boosting workflows.
-
+- Your powerful, straight-to-the-point professional AI assistant.
 ---
 
 ## Features
