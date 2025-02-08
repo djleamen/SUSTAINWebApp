@@ -112,11 +112,13 @@ SUSTAIN offers flexible configurations to suit different workflows:
 ---
 
 ## Roadmap
-- [ ] Implement dynamic summarization based on context length
-- [ ] Provide additional eco-feedback on overall token savings
-- [ ] Add support for more languages and spaCy models
+- [x] Implement dynamic summarization based on context length
+- [x] Provide additional eco-feedback on overall token savings
+- [x] Enhance the GUI with more user-friendly features and customization options
+- [x] Add save, clear chat features
 - [ ] Implement caching for frequently requested queries to reduce API calls
-- [ ] Enhance the GUI with more user-friendly features and customization options
+- [ ] Convert to web app and deploy on Azure
+
 
 ---
 
