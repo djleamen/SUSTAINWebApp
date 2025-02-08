@@ -15,6 +15,11 @@ logging.basicConfig(filename='sustain.log', level=logging.INFO, format='%(asctim
 
 load_dotenv()
 
+def track_token_length(message):
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(message)
+    return len(doc)
+
 # Main function to run the chat application
 def main(): 
     logging.info("Starting SUSTAIN Chat Application")
@@ -31,7 +36,7 @@ def main():
         download("en_core_web_sm")
     
     root = tk.Tk()
-    app = ChatApp(root)
+    app = ChatApp(root, track_token_length)
     root.mainloop()
 
 if __name__ == "__main__":

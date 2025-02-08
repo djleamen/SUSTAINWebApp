@@ -27,10 +27,12 @@ load_dotenv()
 
 # Create a chat application using Tkinter
 class ChatApp:
-    def __init__(self, root):
+    def __init__(self, root, track_token_length):
+        self.track_token_length = track_token_length
         self.root = root
         self.root.title("SUSTAIN Chat")
-        self.root.geometry("800x600")  # Increase window size
+        self.root.geometry("800x800")  # Increase window size
+        self.message_history = []
 
         # Create a menu bar
         self.menu_bar = tk.Menu(self.root)
@@ -79,30 +81,43 @@ class ChatApp:
         self.token_savings_label = tk.Label(root, text="Average token savings: 0.00%. Thank you for going green!", fg="green", font=("Courier", 16))  # Change font to Courier and increase font size
         self.token_savings_label.pack(pady=10)
 
+        # Add a button to calculate CO2 savings
+        self.co2_button = tk.Button(root, text="Calculate CO2 Savings", command=self.calculate_co2_savings, font=("Courier", 16))
+        self.co2_button.pack(pady=10)
+
     # Process user input, send request to OpenAI API, and display response
     def send_message(self, event):
         user_input = self.entry.get()
         if user_input:
+            # Store the message in history
+            self.message_history.append(user_input)
+        
+            # Display and process the message
             self.display_message("You: " + user_input)
-            
+        
             # Check for specific input "What is SUSTAIN?"
             if user_input.strip().lower() == "what is sustain?":
-                response = ("I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs "
+                response = ("I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs " 
                             "and increase productivity. I filter out irrelevant words and phrases from prompts and limit responses to "
                             "essential outputs, minimizing the number of tokens used.")
                 percentage_saved = 0  # No token savings calculation for predefined response
+                token_length = 0  # No token length for predefined response
             else:
                 response, percentage_saved = self.sustain.get_response(user_input)
-            
+                token_length = self.sustain.count_tokens(user_input)
+        
             self.display_message("\nSUSTAIN: " + response)
             self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!\n")
             self.entry.delete(0, tk.END)
-            
+        
             # Update token savings
             self.message_count += 1
             self.total_percentage_saved += percentage_saved
             average_savings = self.total_percentage_saved / self.message_count
             self.token_savings_label.config(text=f"Average token savings: {average_savings:.2f}%. Thank you for going green!")
+
+            # Track token length
+            self.track_token_length(user_input)
 
     # Display a message in the chat area
     def display_message(self, message):
@@ -137,6 +152,26 @@ class ChatApp:
         self.chat_area.delete("1.0", tk.END)
         self.chat_area.config(state='disabled')
         self.display_settings_message("Chat history cleared.")
+
+    def calculate_co2_savings(self):
+        kwh_per_token_saved = 0.0001  # 0.1 Wh per token saved
+        co2_per_kwh_saved = 0.7       # 0.7 kg of CO2 per kWh saved (realistic value)
+
+        # Calculate total tokens saved
+        total_tokens_saved = 0
+        for message_text in self.message_history:
+            input_tokens = self.sustain.count_tokens(message_text)
+            tokens_saved = input_tokens * (self.total_percentage_saved / 100)  # Simplified logic
+            total_tokens_saved += tokens_saved
+
+        # Calculate yearly kWh and CO2 savings
+        total_kwh_saved = total_tokens_saved * kwh_per_token_saved * 365
+        total_co2_saved = (total_kwh_saved * co2_per_kwh_saved) / 1_000  # Convert kg to metric tons
+
+        # Display the results
+        message = (f"If you continue using SUSTAIN at this pace for a year, you will have saved approximately {total_kwh_saved:.4f} "
+                f"kWh of power, reducing {total_co2_saved:.4f} metric tons of CO2 emissions! Thank you for making a difference!")
+        self.display_settings_message(message)
 
 # Run the chat application
 if __name__ == "__main__":
