@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUSTAIN Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .chat-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .chat-box { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        .chat-input { width: 100%; padding: 10px; margin-top: 10px; }
+        .chat-message { margin-bottom: 10px; }
+        .user-message { text-align: right; }
+        .bot-message { text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>SUSTAIN Chat</h1>
+        <div id="chat-box" class="chat-box"></div>
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type your message here...">
+    </div>
+
+    <script>
+        document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const message = e.target.value;
+                if (message) {
+                    displayMessage('You: ' + message, 'user-message');
+                    fetch('/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: message })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.response) {
+                            displayMessage('SUSTAIN: ' + data.response, 'bot-message');
+                            displayMessage(`With SUSTAIN, you saved ${data.percentage_saved.toFixed(2)}% more tokens compared to traditional AI!`, 'bot-message');
+                        } else if (data.error) {
+                            displayMessage('Error: ' + data.error, 'bot-message');
+                        }
+                    });
+                    e.target.value = '';
+                }
+            }
+        });
+
+        function displayMessage(message, className) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'chat-message ' + className;
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
