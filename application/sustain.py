@@ -37,7 +37,7 @@ class SUSTAIN:
                 messages=[{"role": "user", "content": optimized_input}],
                 max_tokens=100 
             )
-            response_text = response.choices[0].message.content.strip().split('.')[0]
+            response_text = response.choices[0].message.content.strip()
             response_tokens = len(response_text.split())
             percentage_saved = self.calculate_percentage_saved(len(optimized_input.split()), response_tokens)
             return response_text, percentage_saved  # Return response and percentage saved
