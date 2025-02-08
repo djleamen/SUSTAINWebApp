@@ -10,6 +10,11 @@ class SUSTAIN:
         self.nlp = spacy.load("en_core_web_sm")
 
     def get_response(self, user_input):
+        # Check for specific question and return predefined response
+        if user_input.strip().lower() == "what is sustain?":
+            response_text = "SUSTAIN is a chat application that helps you optimize your questions and responses to save time and improve efficiency."
+            return response_text, 0.0
+
         # Optimize the user input and calculate token savings
         optimized_input = self.optimize_text(user_input)
         original_tokens = self.count_tokens(user_input)
@@ -21,22 +26,21 @@ class SUSTAIN:
 
         # Ask for a concise response but ignore it for savings calculation
         try:
-         response = self.client.chat.completions.create(
-              model="gpt-3.5-turbo",
-              messages=[{"role": "user", "content": f"{optimized_input} in <30 words."}],
-              max_tokens=50
-         )
-         response_text = response.choices[0].message.content.strip()
-
-         return response_text, percentage_saved
+            response = self.client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": f"{optimized_input} in <30 words."}],
+                max_tokens=50
+            )
+            response_text = response.choices[0].message.content.strip()
+            return response_text, percentage_saved
 
         except OpenAI.error.OpenAIError as e:
-          if e.code == 'insufficient_quota':
-               return "Error: The API quota has been exceeded. Please contact SUSTAIN.", 0
-          elif e.code == 'model_not_found':
+            if e.code == 'insufficient_quota':
+                return "Error: The API quota has been exceeded. Please contact SUSTAIN.", 0
+            elif e.code == 'model_not_found':
                 return "Error: The specified model does not exist or you do not have access to it.", 0
-          else:
-              return f"Error: {str(e)}", 0
+            else:
+                return f"Error: {str(e)}", 0
 
     def trim_response(self, response_text):
         # Enforce 20 words max to keep responses concise
@@ -65,7 +69,7 @@ class SUSTAIN:
         return min(percentage_saved, 100)
     
     def optimize_text(self, text):
-    # Minimal but effective filtering of unnecessary phrases
+        # Minimal but effective filtering of unnecessary phrases
         phrases_to_remove = [
             "Hello", "please", "Thank you", "thanks", "Can you", "could you", "would you", "just", 
             "kindly", "explain", "to me", "tell me", "about", "differences between", "thank you",

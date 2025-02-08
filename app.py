@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 # Initialize the SUSTAIN API
 api_key = os.getenv("OPENAI_API_KEY")
