@@ -2,6 +2,7 @@ import os
 from openai import OpenAI
 import spacy
 import tiktoken
+import re
 
 class SUSTAIN:
     def __init__(self, api_key):
@@ -23,7 +24,7 @@ class SUSTAIN:
         try:
          response = self.client.chat.completions.create(
               model="gpt-3.5-turbo",
-              messages=[{"role": "user", "content": f"{optimized_input} in <30 words."}],
+              messages=[{"role": "user", "content": f"{optimized_input} in <20 words."}],
               max_tokens=50
          )
          response_text = response.choices[0].message.content.strip()
@@ -65,21 +66,54 @@ class SUSTAIN:
         return min(percentage_saved, 100)
     
     def optimize_text(self, text):
-    # Minimal but effective filtering of unnecessary phrases
-        phrases_to_remove = [
-            "Hello", "please", "Thank you", "thanks", "Can you", "could you", "would you", "just", 
-            "kindly", "explain", "to me", "tell me", "about", "differences between", "thank you",
-            "the differences", "in order to", "with regard to"
-        ]
-    
+        # Read phrases to remove from a text file
+        with open('phrases_to_remove.txt', 'r') as file:
+            phrases_to_remove = [line.strip() for line in file.readlines()]
+
         # Remove unnecessary phrases
         for phrase in phrases_to_remove:
             text = text.replace(phrase, "")
 
+        # Convert words to contractions
+        text = self.convert_to_contractions(text)
+
         # Reduce extra spaces and trim
         optimized_text = ' '.join(text.split())
         return optimized_text.strip()
-    
+
+    def convert_to_contractions(self, text):
+        contractions = {
+            "do not": "don't",
+            "i am": "i'm",
+            "you are": "you're",
+            "we are": "we're",
+            "they are": "they're",
+            "is not": "isn't",
+            "are not": "aren't",
+            "cannot": "can't",
+            "could not": "couldn't",
+            "would not": "wouldn't",
+            "should not": "shouldn't",
+            "will not": "won't",
+            "have not": "haven't",
+            "has not": "hasn't",
+            "had not": "hadn't",
+            "it is": "it's",
+            "that is": "that's",
+            "there is": "there's",
+            "what is": "what's",
+            "who is": "who's",
+            "where is": "where's",
+            "when is": "when's",
+            "why is": "why's",
+            "how is": "how's",
+        }
+
+        for phrase, contraction in contractions.items():
+            text = re.sub(r'\b' + phrase + r'\b', contraction, text, flags=re.IGNORECASE)
+
+        return text
+
     def deep_optimize_response(self, response_text):
         # Phrases to trim redundant details
         phrases_to_remove = [
