@@ -116,7 +116,7 @@ SUSTAIN offers flexible configurations to suit different workflows:
 - [x] Provide additional eco-feedback on overall token savings
 - [x] Enhance the GUI with more user-friendly features and customization options
 - [x] Add save, clear chat features
-- [ ] Implement caching for frequently requested queries to reduce API calls
+- [x] Implement caching for frequently requested queries to reduce API calls
 - [ ] Convert to web app and deploy on Azure
 
 
