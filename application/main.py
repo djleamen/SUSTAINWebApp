@@ -12,7 +12,7 @@ import spacy
 load_dotenv()
 
 # Main function to run the chat application
-def main():
+def main(): 
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("API key not found. Please set the OPENAI_API_KEY environment variable.")

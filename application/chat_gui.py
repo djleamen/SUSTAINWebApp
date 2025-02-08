@@ -71,7 +71,16 @@ class ChatApp:
         user_input = self.entry.get()
         if user_input:
             self.display_message("You: " + user_input)
-            response, percentage_saved = self.sustain.get_response(user_input)
+            
+            # Check for specific input "What is SUSTAIN?"
+            if user_input.strip().lower() == "what is sustain?":
+                response = ("I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs "
+                            "and increase productivity. I filter out irrelevant words and phrases from prompts and limit responses to "
+                            "essential outputs, minimizing the number of tokens used.")
+                percentage_saved = 0  # No token savings calculation for predefined response
+            else:
+                response, percentage_saved = self.sustain.get_response(user_input)
+            
             self.display_message("\nSUSTAIN: " + response)
             self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!")
             self.entry.delete(0, tk.END)
