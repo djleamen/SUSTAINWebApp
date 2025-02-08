@@ -13,8 +13,16 @@ class SUSTAIN:
         self.api_key = api_key
         self.client = OpenAI(api_key=self.api_key)
         self.nlp = spacy.load("en_core_web_sm")
+        self.cache = {}
 
     def get_response(self, user_input):
+        # Check cache first
+        if user_input in self.cache:
+            logging.info(f"Cache hit for input: {user_input}")
+            response_text, _ = self.cache[user_input]
+            percentage_saved = 100  # Tokens saved is 100% when using cache
+            return response_text, percentage_saved
+
         optimized_input = self.optimize_text(user_input)
         original_tokens = self.count_tokens(user_input)
         optimized_tokens = self.count_tokens(optimized_input)
@@ -29,6 +37,10 @@ class SUSTAIN:
             )
             response_text = response.choices[0].message.content.strip()
             logging.info(f"Response: {response_text}, Tokens saved: {percentage_saved:.2f}%")
+            
+            # Store response in cache
+            self.cache[user_input] = (response_text, percentage_saved)
+            
             return response_text, percentage_saved
 
         except OpenAI.error.OpenAIError as e:

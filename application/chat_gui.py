@@ -30,6 +30,7 @@ class ChatApp:
     def __init__(self, root):
         self.root = root
         self.root.title("SUSTAIN Chat")
+        self.root.geometry("800x600")  # Increase window size
 
         # Create a menu bar
         self.menu_bar = tk.Menu(self.root)
@@ -48,19 +49,19 @@ class ChatApp:
         original_logo = Image.open("sustain_logo.png")
         
         # Resize SUSTAIN logo while maintaining aspect ratio
-        max_size = (100, 100)
+        max_size = (200, 200)  # Increase logo size
         original_logo.thumbnail(max_size, Image.LANCZOS)
         self.logo = ImageTk.PhotoImage(original_logo)
         
         # Display SUSTAIN logo in the chat window
         self.logo_label = tk.Label(root, image=self.logo)
-        self.logo_label.pack(pady=10)
+        self.logo_label.pack(pady=20)  # Increase padding
         
         # Create a chat area and entry field
-        self.chat_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, state='disabled', height=20)
-        self.chat_area.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
-        self.entry = tk.Entry(root)
-        self.entry.pack(padx=10, pady=10, fill=tk.X, expand=True)
+        self.chat_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, state='disabled', height=25, font=("Courier", 16))  # Change font to Courier and increase font size
+        self.chat_area.pack(padx=20, pady=20, fill=tk.BOTH, expand=True)
+        self.entry = tk.Entry(root, font=("Courier", 16))  # Change font to Courier and increase font size
+        self.entry.pack(padx=20, pady=20, fill=tk.X, expand=True)
         self.entry.bind("<Return>", self.send_message)
         
         # Initialize the SUSTAIN API
@@ -75,8 +76,8 @@ class ChatApp:
         self.message_count = 0
         
         # Add a label to display token percentage saved
-        self.token_savings_label = tk.Label(root, text="Average token savings: 0.00%. Thank you for going green!", fg="green")
-        self.token_savings_label.pack(pady=5)
+        self.token_savings_label = tk.Label(root, text="Average token savings: 0.00%. Thank you for going green!", fg="green", font=("Courier", 16))  # Change font to Courier and increase font size
+        self.token_savings_label.pack(pady=10)
 
     # Process user input, send request to OpenAI API, and display response
     def send_message(self, event):
@@ -94,7 +95,7 @@ class ChatApp:
                 response, percentage_saved = self.sustain.get_response(user_input)
             
             self.display_message("\nSUSTAIN: " + response)
-            self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!")
+            self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!\n")
             self.entry.delete(0, tk.END)
             
             # Update token savings
