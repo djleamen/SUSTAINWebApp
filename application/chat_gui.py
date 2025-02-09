@@ -132,6 +132,8 @@ class ChatApp:
         info_window.title("Information")
         info_window.geometry("600x400")
 
+        info_window.configure(bg="#1e1e1e")  # Dark background
+
         # Scrollable text widget
         info_text = (
             "Welcome to SUSTAIN Chat!\n"
@@ -153,10 +155,18 @@ class ChatApp:
             "This helps in reducing compute costs and environmental impact."
         )
 
-        # Add scrollable text box
-        text_widget = tk.Text(info_window, wrap=tk.WORD, font=("Courier", 12), padx=15, pady=10, bg="#f4f4f4", relief=tk.FLAT)
+        # ✅ Set dark background for text widget
+        text_widget = tk.Text(
+            info_window, wrap=tk.WORD, font=("Courier", 12), padx=15, pady=10,
+            bg="#1e1e1e", fg="white", relief=tk.FLAT
+        )
         text_widget.insert(tk.END, info_text)
         text_widget.config(state='disabled')  # Make text read-only
+
+        # # Add scrollable text box
+        # text_widget = tk.Text(info_window, wrap=tk.WORD, font=("Courier", 12), padx=15, pady=10, bg="#f4f4f4", relief=tk.FLAT)
+        # text_widget.insert(tk.END, info_text)
+        # text_widget.config(state='disabled')  # Make text read-only
 
         # Scrollbar configuration
         scrollbar = tk.Scrollbar(info_window, command=text_widget.yview)
