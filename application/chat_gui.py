@@ -1,3 +1,10 @@
+"""
+Description: This script creates a chat application using Tkinter that interacts with the SUSTAIN API. 
+The chat application allows users to send messages to SUSTAIN and receive optimized responses. 
+The application also calculates the average token savings and CO2 emissions saved by using SUSTAIN.
+
+"""
+# Import required libraries
 import os
 import tkinter as tk
 from tkinter import scrolledtext, PhotoImage, filedialog
@@ -80,12 +87,14 @@ class ChatApp:
         self.menu_bar.add_cascade(label="Help", menu=self.help_menu)
         self.help_menu.add_command(label="Info", command=self.show_info)
 
+    # Function to send a message to SUSTAIN
     def send_message(self, event):
         user_input = self.entry.get()
         if user_input:
             self.message_history.append(user_input)
             self.display_message("You: " + user_input)
 
+            # Check if user input is a special command
             if user_input.strip().lower() == "what is sustain?":
                 response = (
                     "I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs "
@@ -96,6 +105,7 @@ class ChatApp:
             else:
                 response, percentage_saved = self.sustain.get_response(user_input)
             
+            # Display the response from SUSTAIN
             self.display_message("\nSUSTAIN: " + response)
             self.display_settings_message(f"With SUSTAIN, you saved {percentage_saved:.2f}% more tokens compared to traditional AI!\n")
             self.entry.delete(0, tk.END)
@@ -108,12 +118,14 @@ class ChatApp:
 
             self.track_token_length(user_input)
 
+    # Function to display a message in the chat area
     def display_message(self, message):
         self.chat_area.config(state='normal')
         self.chat_area.insert(tk.END, message + "\n")
         self.chat_area.config(state='disabled')
         self.chat_area.yview(tk.END)
 
+    # Function to display a settings message in the chat area
     def display_settings_message(self, message):
         self.chat_area.config(state='normal')
         self.chat_area.insert(tk.END, message + "\n", "grey")
@@ -121,6 +133,7 @@ class ChatApp:
         self.chat_area.config(state='disabled')
         self.chat_area.yview(tk.END)
 
+    # Function to save the chat history to a file
     def save_chat(self):
         chat_history = self.chat_area.get("1.0", tk.END).strip()
         if chat_history:
@@ -130,12 +143,14 @@ class ChatApp:
                     file.write(chat_history)
                 self.display_settings_message(f"Chat history saved to {file_path}")
 
+    # Function to clear the chat history
     def clear_chat(self):
         self.chat_area.config(state='normal')
         self.chat_area.delete("1.0", tk.END)
         self.chat_area.config(state='disabled')
         self.display_settings_message("Chat history cleared.")
 
+    # Function to calculate CO2 savings based on token savings
     def calculate_co2_savings(self):
         kwh_per_token_saved = 0.0001
         co2_per_kwh_saved = 0.7
@@ -145,12 +160,14 @@ class ChatApp:
         total_kwh_saved = total_tokens_saved * kwh_per_token_saved * 365
         total_co2_saved = (total_kwh_saved * co2_per_kwh_saved) / 1_000
 
+        # Display the CO2 savings message
         message = (
             f"If you continue using SUSTAIN at this pace for a year, you will have saved approximately {total_kwh_saved:.4f} "
             f"kWh of power, reducing {total_co2_saved:.4f} metric tons of CO2 emissions! Thank you for making a difference!"
         )
         self.display_settings_message(message)
 
+    # Function to show information about the chat application
     def show_info(self):
         info_window = tk.Toplevel(self.root)
         info_window.title("Information")
@@ -179,18 +196,13 @@ class ChatApp:
             "This helps in reducing compute costs and environmental impact."
         )
 
-        # ✅ Set dark background for text widget
+        # Set UI for text widget
         text_widget = tk.Text(
             info_window, wrap=tk.WORD, font=("Courier", 12), padx=15, pady=10,
             bg="#1e1e1e", fg="white", relief=tk.FLAT
         )
         text_widget.insert(tk.END, info_text)
         text_widget.config(state='disabled')  # Make text read-only
-
-        # # Add scrollable text box
-        # text_widget = tk.Text(info_window, wrap=tk.WORD, font=("Courier", 12), padx=15, pady=10, bg="#f4f4f4", relief=tk.FLAT)
-        # text_widget.insert(tk.END, info_text)
-        # text_widget.config(state='disabled')  # Make text read-only
 
         # Scrollbar configuration
         scrollbar = tk.Scrollbar(info_window, command=text_widget.yview)

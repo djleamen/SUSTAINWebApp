@@ -3,6 +3,7 @@ Description: This file is responsible for running the chat application.
 
 '''
 
+# Import required libraries
 import os
 import logging
 import tkinter as tk
@@ -13,8 +14,10 @@ import spacy
 # Configure logging
 logging.basicConfig(filename='sustain.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Load environment variables from .env file
 load_dotenv()
 
+# Function to track the token length of a message
 def track_token_length(message):
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(message)
@@ -39,6 +42,7 @@ def main():
     app = ChatApp(root, track_token_length)
     root.mainloop()
 
+# Run the main function
 if __name__ == "__main__":
     try:
         main()
