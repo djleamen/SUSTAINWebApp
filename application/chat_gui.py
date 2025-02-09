@@ -58,9 +58,27 @@ class ChatApp:
         self.token_savings_label = tk.Label(root, text="Average token savings: 0.00%. Thank you for going green!", fg="green", font=("Courier", 16))
         self.token_savings_label.pack(pady=10)
 
-        # Button for CO2 savings
-        self.co2_button = tk.Button(root, text="Calculate CO2 Savings", command=self.calculate_co2_savings, font=("Courier", 16))
-        self.co2_button.pack(pady=10)
+        # Create a menu bar
+        self.menu_bar = tk.Menu(root)
+        root.config(menu=self.menu_bar)
+
+        # Add File menu
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.file_menu.add_command(label="Save Chat", command=self.save_chat)
+        self.file_menu.add_command(label="Clear Chat", command=self.clear_chat)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Exit", command=root.quit)
+
+        # Add Tools menu
+        self.tools_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="Tools", menu=self.tools_menu)
+        self.tools_menu.add_command(label="Calculate CO2 Savings", command=self.calculate_co2_savings)
+
+        # Add Help menu
+        self.help_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="Help", menu=self.help_menu)
+        self.help_menu.add_command(label="Info", command=self.show_info)
 
     def send_message(self, event):
         user_input = self.entry.get()
@@ -111,6 +129,12 @@ class ChatApp:
                 with open(file_path, "w") as file:
                     file.write(chat_history)
                 self.display_settings_message(f"Chat history saved to {file_path}")
+
+    def clear_chat(self):
+        self.chat_area.config(state='normal')
+        self.chat_area.delete("1.0", tk.END)
+        self.chat_area.config(state='disabled')
+        self.display_settings_message("Chat history cleared.")
 
     def calculate_co2_savings(self):
         kwh_per_token_saved = 0.0001
