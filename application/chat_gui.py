@@ -155,7 +155,17 @@ class ChatApp:
         kwh_per_token_saved = 0.0001
         co2_per_kwh_saved = 0.7
 
-        total_tokens_saved = sum(self.sustain.count_tokens(msg) * (self.total_percentage_saved / 100) for msg in self.message_history)
+        total_tokens_saved = 0
+        for msg in self.message_history:
+            original_tokens = self.sustain.count_tokens(msg)
+            optimized_input = self.sustain.optimize_text(msg)
+            optimized_tokens = self.sustain.count_tokens(optimized_input)
+            tokens_saved = original_tokens - optimized_tokens
+            total_tokens_saved += tokens_saved
+
+            # Assuming the response is capped at 50 tokens
+            response_tokens = 50
+            total_tokens_saved += response_tokens
 
         total_kwh_saved = total_tokens_saved * kwh_per_token_saved * 365
         total_co2_saved = (total_kwh_saved * co2_per_kwh_saved) / 1_000
