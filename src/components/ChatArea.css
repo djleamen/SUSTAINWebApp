@@ -21,40 +21,44 @@
   padding: 8px 12px;
 }
 
-/* ✅ Expands user messages while keeping structure */
+.user-message, .sustain-message {
+  display: inline-block; /* Auto-resize based on text length */
+  max-width: 60%; /* Prevent bubbles from being too wide */
+  min-width: 10%; /* Avoid bubbles being too small */
+  word-wrap: break-word; /* Ensure long words wrap correctly */
+  white-space: normal; /* Allow normal text wrapping */
+  padding: 14px 18px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Courier", monospace;
+}
+
+/* ✅ Keep user messages aligned right */
 .user-message {
   background-color: #4CAF50;
   color: white;
-  padding: 14px 18px;
-  border-radius: 20px;
-  max-width: 70%; /* ✅ Expands a bit more */
   align-self: flex-end;
-  text-align: right;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: "Lexend", monospace;
+  text-align: left;
 }
 
-/* ✅ Expands SUSTAIN messages similarly */
+/* ✅ Keep SUSTAIN messages aligned left */
 .sustain-message {
   background-color: #D4EDDA;
   color: #155724;
-  padding: 14px 18px;
-  border-radius: 20px;
-  max-width: 70%; /* ✅ Expands a bit more */
   align-self: flex-start;
   text-align: left;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: "Lexend", monospace;
+}
+
+.message-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .message-container.user {
   justify-content: flex-end;
-}
-
-.message-container.sustain {
-  justify-content: flex-start;
 }
 
 .savings-text {
