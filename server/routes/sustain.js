@@ -33,6 +33,9 @@ fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
   }
 });
 
+// Simple in-memory cache (Stores prompt → response pairs)
+const responseCache = new Map();
+
 // Function to escape special characters in a string for regex
 const escapeRegex = (phrase) => phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
@@ -81,11 +84,20 @@ const applyContractions = (text) => {
 router.post('/', async (req, res) => {
   const { userInput } = req.body;
 
-  // Keep predefined response for "What is SUSTAIN?"
+  // Predefined response for "What is SUSTAIN?"
   if (userInput.trim().toLowerCase() === "what is sustain?") {
     return res.json({
       responseText: "I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. I filter out irrelevant words and phrases from prompts and limit responses to essential outputs, minimizing the number of tokens used.",
       percentageSaved: 0
+    });
+  }
+
+  // Check if response is cached
+  if (responseCache.has(userInput)) {
+    console.log(`Cache hit for: "${userInput}"`); // Debug log
+    return res.json({
+      responseText: responseCache.get(userInput),
+      percentageSaved: 100 // Cached responses save 100% tokens
     });
   }
 
@@ -98,7 +110,7 @@ router.post('/', async (req, res) => {
 
     // Remove stopwords if `phrasesToRemove` is not empty
     if (phrasesToRemove.length > 0) {
-      const safePhrases = phrasesToRemove.map(escapeRegex); 
+      const safePhrases = phrasesToRemove.map(escapeRegex);
       if (safePhrases.length > 0) {
         const regex = new RegExp(`\\b(${safePhrases.join("|")})\\b`, 'gi');
         optimizedInput = optimizedInput.replace(regex, '').trim();
@@ -119,6 +131,9 @@ router.post('/', async (req, res) => {
     });
 
     const sustainOutputText = sustainResponse.choices[0].message.content.trim();
+
+    // Store response in cache for reuse
+    responseCache.set(userInput, sustainOutputText);
 
     // Send optimized response with calculated savings
     res.json({
