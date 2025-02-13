@@ -12,15 +12,16 @@ const InputArea = ({ onSendMessage }) => {
   };
 
   return (
-    <div className="InputArea">
+    <div className="InputArea" style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}>
       <input
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && handleSend()}
         placeholder="Type your message..."
+        style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}
       />
-      <button onClick={handleSend}>Send</button>
+      <button onClick={handleSend} style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}>Send</button>
     </div>
   );
 };

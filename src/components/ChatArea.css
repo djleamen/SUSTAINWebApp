@@ -6,7 +6,7 @@
   max-width: 900px; /* ✅ Prevents it from getting too wide */
   margin: auto; /* ✅ Centers it */
   font-size: 20px; /* ✅ Increases text size */
-  font-family: "Courier", monospace;
+  font-family: "Lexend", monospace;
   height: 65vh; /* ✅ Uses more vertical space */
   overflow-y: auto;
   border-radius: 10px;
@@ -32,7 +32,7 @@
   text-align: right;
   font-size: 20px;
   font-weight: bold;
-  font-family: "Courier", monospace;
+  font-family: "Lexend", monospace;
 }
 
 /* ✅ Expands SUSTAIN messages similarly */
@@ -46,7 +46,7 @@
   text-align: left;
   font-size: 20px;
   font-weight: bold;
-  font-family: "Courier", monospace;
+  font-family: "Lexend", monospace;
 }
 
 .message-container.user {
