@@ -1,0 +1,67 @@
+.ChatArea {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 80vw; /* ✅ Expands to 80% of the screen */
+  max-width: 900px; /* ✅ Prevents it from getting too wide */
+  margin: auto; /* ✅ Centers it */
+  font-size: 20px; /* ✅ Increases text size */
+  font-family: "Courier", monospace;
+  height: 65vh; /* ✅ Uses more vertical space */
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+}
+
+/* ✅ Increases padding for chat bubbles */
+.message-container {
+  display: flex;
+  margin-bottom: 15px;
+  padding: 8px 12px;
+}
+
+/* ✅ Expands user messages while keeping structure */
+.user-message {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 20px;
+  max-width: 70%; /* ✅ Expands a bit more */
+  align-self: flex-end;
+  text-align: right;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Courier", monospace;
+}
+
+/* ✅ Expands SUSTAIN messages similarly */
+.sustain-message {
+  background-color: #D4EDDA;
+  color: #155724;
+  padding: 14px 18px;
+  border-radius: 20px;
+  max-width: 70%; /* ✅ Expands a bit more */
+  align-self: flex-start;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Courier", monospace;
+}
+
+.message-container.user {
+  justify-content: flex-end;
+}
+
+.message-container.sustain {
+  justify-content: flex-start;
+}
+
+.savings-text {
+  font-size: 14px;
+  color: grey;
+  margin-top: 3px;
+  font-style: italic;
+  text-align: left;
+  padding-left: 15px;
+}
