@@ -1,10 +1,24 @@
+/*
+  Description: This component renders the information modal. 
+  It displays information about the application and how to use it.
+*/
+
+// Required imports
 import React from 'react';
 import './InfoModal.css';
 
-const InfoModal = ({ onClose }) => {
+// Display the information modal
+const InfoModal = ({ onClose, darkMode }) => {
+  const handleClickOutside = (e) => {
+    if (e.target.className === 'InfoModal') {
+      onClose();
+    }
+  };
+
+  // Return the JSX for the component
   return (
-    <div className="InfoModal">
-      <div className="InfoModal-content">
+    <div className="InfoModal" onClick={handleClickOutside}>
+      <div className={`InfoModal-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
         <h2>Information</h2>
         <p>Welcome to SUSTAIN Chat!</p>
         <p>How to use:</p>
@@ -20,10 +34,10 @@ const InfoModal = ({ onClose }) => {
         <p>We follow OpenAI's ethics policy, ensuring that our AI is used responsibly and ethically. We prioritize user privacy and data security.</p>
         <p><strong>What we cut out and why:</strong></p>
         <p>We remove unnecessary words and phrases to optimize the text and reduce the number of tokens used. This helps in reducing compute costs and environmental impact.</p>
-        <button onClick={onClose}>Close</button>
       </div>
     </div>
   );
 };
 
+// Export the component
 export default InfoModal;

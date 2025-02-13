@@ -1,20 +1,27 @@
+/*
+Description: This file contains the CSS styles for the ChatApp component.
+*/
+
+/* General formatting */
 html, body {
   height: 100%;
-  overflow: hidden; /* ✅ Disables scrolling on the page */
+  overflow: hidden; 
   margin: 0;
   padding: 0;
 }
 
+/* App container formatting */
 .App {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 100vh; /* ✅ Full viewport height */
+  height: 100vh; 
   background-color: #f4f4f4;
 }
 
+/* App header formatting */
 .App-logo {
   height: 80px;
 }
@@ -23,27 +30,62 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 80vw; /* ✅ Matches chat area width */
+  width: 80vw; 
   max-width: 900px;
-  background-color: #282c34;
   padding: 20px;
-  color: white;
   border-radius: 10px;
 }
 
-.Info-button {
+/* Button formatting */
+.Info-button, .Mode-toggle, .Settings-button {
   font-size: 24px;
   background: none;
   border: none;
-  color: white;
   cursor: pointer;
+  color: inherit;
 }
 
-.Info-button:hover {
-  color: #61dafb;
+.Info-button:hover, .Mode-toggle:hover, .Settings-button:hover {
+  color: #4CAF50;
 }
 
-/* ✅ Chat area formatting */
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Chat area formatting light and dark mode */
+.light-mode {
+  background-color: #f4f4f4;
+  color: black;
+}
+
+.light-mode .App-header {
+  background-color: #ffffff;
+  color: black;
+}
+
+.light-mode .ChatArea {
+  background-color: #ffffff;
+  color: black;
+}
+
+.dark-mode {
+  background-color: #282c34;
+  color: white;
+}
+
+.dark-mode .App-header {
+  background-color: #282c34;
+  color: white;
+}
+
+.dark-mode .ChatArea {
+  background-color: #333;
+  color: white;
+}
+
+/* Chat area formatting */
 .ChatArea {
   display: flex;
   flex-direction: column;
@@ -53,15 +95,14 @@ html, body {
   margin: auto;
   font-size: 20px;
   font-family: "Lexend", monospace;
-  height: 65vh; /* ✅ Chat area has limited height */
-  overflow-y: auto; /* ✅ Allows scrolling inside the chat */
+  height: 65vh; 
+  overflow-y: auto; 
   border-radius: 10px;
   border: 1px solid #ddd;
   background-color: #ffffff;
 }
 
-
-/* ✅ Message styling */
+/* Chat bubble formatting */
 .message-container {
   display: flex;
   margin-bottom: 15px;
@@ -102,7 +143,7 @@ html, body {
   justify-content: flex-start;
 }
 
-/* ✅ Input field stays aligned */
+/* Input area formatting */
 .InputArea {
   width: 80vw;
   max-width: 900px;
@@ -117,9 +158,8 @@ html, body {
   gap: 10px;
 }
 
-/* ✅ Send button in the input area */
 .InputArea button {
-  background-color: #4CAF50; /* 🌿 Green */
+  background-color: #4CAF50; 
   color: white;
   border: none;
   padding: 10px 20px;
@@ -130,14 +170,13 @@ html, body {
 }
 
 .InputArea button:hover {
-  background-color: #388E3C; /* 🌿 Darker green on hover */
+  background-color: #388E3C; 
 }
-
-/* ✅ Info modal button */
+/* Info modal formatting */
 .Info-button {
   font-size: 24px;
   background: none;
-  border: 2px solid #4CAF50; /* 🌿 Green border */
+  border: 2px solid #4CAF50; 
   color: #4CAF50;
   cursor: pointer;
   padding: 5px 10px;
@@ -146,11 +185,10 @@ html, body {
 }
 
 .Info-button:hover {
-  background-color: #4CAF50; /* 🌿 Turns solid green on hover */
+  background-color: #4CAF50; 
   color: white;
 }
 
-/* ✅ Token savings message styling */
 .TokenSavings {
   font-family: "Lexend", monospace;
   font-size: 16px;

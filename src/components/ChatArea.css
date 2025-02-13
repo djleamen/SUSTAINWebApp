@@ -1,20 +1,25 @@
+/*
+Description: This file contains the CSS styles for the ChatArea component.
+*/
+
+/* ChatArea component styles */
 .ChatArea {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  width: 80vw; /* ✅ Expands to 80% of the screen */
-  max-width: 900px; /* ✅ Prevents it from getting too wide */
-  margin: auto; /* ✅ Centers it */
-  font-size: 20px; /* ✅ Increases text size */
+  width: 80vw; 
+  max-width: 900px; 
+  margin: auto;
+  font-size: 20px; 
   font-family: "Lexend", monospace;
-  height: 65vh; /* ✅ Uses more vertical space */
+  height: 65vh; 
   overflow-y: auto;
   border-radius: 10px;
   border: 1px solid #ddd;
   background-color: #f8f8f8;
 }
 
-/* ✅ Increases padding for chat bubbles */
+/* Chat bubble formatting */
 .message-container {
   display: flex;
   margin-bottom: 15px;
@@ -34,7 +39,6 @@
   font-family: "Courier", monospace;
 }
 
-/* ✅ Keep user messages aligned right */
 .user-message {
   background-color: #4CAF50;
   color: white;
@@ -42,7 +46,6 @@
   text-align: left;
 }
 
-/* ✅ Keep SUSTAIN messages aligned left */
 .sustain-message {
   background-color: #D4EDDA;
   color: #155724;
@@ -61,6 +64,7 @@
   justify-content: flex-end;
 }
 
+/* Savings text formatting */
 .savings-text {
   font-size: 14px;
   color: grey;
