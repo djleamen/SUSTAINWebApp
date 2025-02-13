@@ -25,22 +25,55 @@ html, body {
   align-items: center;
   width: 80vw; /* ✅ Matches chat area width */
   max-width: 900px;
-  background-color: #282c34;
   padding: 20px;
-  color: white;
   border-radius: 10px;
 }
 
-.Info-button {
+.Info-button, .Mode-toggle, .Settings-button {
   font-size: 24px;
   background: none;
   border: none;
-  color: white;
   cursor: pointer;
+  color: inherit;
 }
 
-.Info-button:hover {
+.Info-button:hover, .Mode-toggle:hover, .Settings-button:hover {
   color: #61dafb;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.light-mode {
+  background-color: #f4f4f4;
+  color: black;
+}
+
+.light-mode .App-header {
+  background-color: #ffffff;
+  color: black;
+}
+
+.light-mode .ChatArea {
+  background-color: #ffffff;
+  color: black;
+}
+
+.dark-mode {
+  background-color: #282c34;
+  color: white;
+}
+
+.dark-mode .App-header {
+  background-color: #282c34;
+  color: white;
+}
+
+.dark-mode .ChatArea {
+  background-color: #333;
+  color: white;
 }
 
 /* ✅ Chat area formatting */

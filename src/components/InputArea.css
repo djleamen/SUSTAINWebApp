@@ -30,3 +30,21 @@
 .InputArea button:hover {
   background-color: #3FA967;
 }
+
+.light-mode .InputArea {
+  background-color: white;
+}
+
+.dark-mode .InputArea {
+  background-color: #333;
+}
+
+.light-mode .InputArea input {
+  background-color: white;
+  color: black;
+}
+
+.dark-mode .InputArea input {
+  background-color: #333;
+  color: white;
+}

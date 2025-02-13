@@ -5,6 +5,7 @@ import ChatArea from './components/ChatArea';
 import InputArea from './components/InputArea';
 import TokenSavings from './components/TokenSavings';
 import InfoModal from './components/InfoModal';
+import SettingsModal from './components/SettingsModal';
 import { log, logError } from './utils/logger';
 
 const App = () => {
@@ -12,6 +13,8 @@ const App = () => {
   const [totalPercentageSaved, setTotalPercentageSaved] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
   const [showInfo, setShowInfo] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     log('App component mounted');
@@ -68,15 +71,23 @@ const App = () => {
   const averageSavings = messageCount > 0 ? (totalPercentageSaved / messageCount).toFixed(2) : 0;
 
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <header className="App-header">
-        <img src={`${process.env.PUBLIC_URL}/sustain_logo.png`} alt="SUSTAIN Logo" className="App-logo" />
-        <button className="Info-button" onClick={() => setShowInfo(true)}>?</button>
+        <img 
+          src={`${process.env.PUBLIC_URL}/${darkMode ? 'SUSTAINOriginalWhiteTransparentCropped.png' : 'SUSTAINOriginalBlackTransparentCropped.png'}`} 
+          alt="SUSTAIN Logo" 
+          className="App-logo" 
+        />
+        <div className="button-group">
+          <button className="Info-button" onClick={() => setShowInfo(true)}>?</button>
+          <button className="Settings-button" onClick={() => setShowSettings(true)}>⚙️</button>
+        </div>
       </header>
       <ChatArea messages={messages} />
-      <InputArea onSendMessage={handleSendMessage} />
+      <InputArea className={darkMode ? 'dark-mode' : 'light-mode'} onSendMessage={handleSendMessage} />
       <TokenSavings averageSavings={averageSavings} />
-      {showInfo && <InfoModal onClose={() => setShowInfo(false)} />}
+      {showInfo && <InfoModal onClose={() => setShowInfo(false)} darkMode={darkMode} />}
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} darkMode={darkMode} setDarkMode={setDarkMode} />}
     </div>
   );
 };

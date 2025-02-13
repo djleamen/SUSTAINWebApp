@@ -1,4 +1,4 @@
-.InfoModal {
+.SettingsModal {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-.InfoModal-content {
+.SettingsModal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -21,29 +21,23 @@
   font-weight: normal;
 }
 
-.InfoModal-content.dark-mode {
+.SettingsModal-content.dark-mode {
   background: #333;
   color: white;
 }
 
-.InfoModal-content.light-mode {
+.SettingsModal-content.light-mode {
   background: white;
   color: black;
 }
 
-.InfoModal-content h2 {
+.SettingsModal-content h2 {
   margin-top: 0;
   font-family: "Lexend", sans-serif;
   font-weight: normal;
 }
 
-.InfoModal-content p,
-.InfoModal-content ul {
-  font-family: "Lexend", sans-serif;
-  font-weight: normal;
-}
-
-.InfoModal-content button {
+.SettingsModal-content button {
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 16px;
@@ -57,6 +51,6 @@
   font-weight: normal;
 }
 
-.InfoModal-content button:hover {
+.SettingsModal-content button:hover {
   background-color: #3FA967;
 }
