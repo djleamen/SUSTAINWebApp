@@ -1,3 +1,8 @@
+/*
+Description: This utility module provides logging functionality for the application.
+*/
+
+// Log a message with a specific level
 const log = (message, level = 'INFO') => {
   const timestamp = new Date().toISOString();
   const logMessage = `${timestamp} - ${level} - ${message}`;
@@ -9,6 +14,7 @@ const log = (message, level = 'INFO') => {
   localStorage.setItem('appLogs', JSON.stringify(logs));
 };
 
+// Log an error message
 const logError = (error) => {
   log(error.message, 'ERROR');
   if (error.stack) {

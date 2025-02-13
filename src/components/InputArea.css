@@ -1,3 +1,7 @@
+/*
+Description: Styles for the InputArea component
+*/
+
 .InputArea {
   display: flex;
   justify-content: center;

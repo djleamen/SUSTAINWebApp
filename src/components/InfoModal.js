@@ -1,6 +1,13 @@
+/*
+  Description: This component renders the information modal. 
+  It displays information about the application and how to use it.
+*/
+
+// Required imports
 import React from 'react';
 import './InfoModal.css';
 
+// Display the information modal
 const InfoModal = ({ onClose, darkMode }) => {
   const handleClickOutside = (e) => {
     if (e.target.className === 'InfoModal') {
@@ -8,6 +15,7 @@ const InfoModal = ({ onClose, darkMode }) => {
     }
   };
 
+  // Return the JSX for the component
   return (
     <div className="InfoModal" onClick={handleClickOutside}>
       <div className={`InfoModal-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -31,4 +39,5 @@ const InfoModal = ({ onClose, darkMode }) => {
   );
 };
 
+// Export the component
 export default InfoModal;

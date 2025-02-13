@@ -1,9 +1,17 @@
+/*
+Description: This file contains the InputArea component, which is a 
+simple input field and a button to send the message.
+*/
+
+// Required imports
 import React, { useState } from 'react';
 import './InputArea.css';
 
+// InputArea component
 const InputArea = ({ onSendMessage }) => {
   const [input, setInput] = useState('');
 
+  // Handle sending the message
   const handleSend = () => {
     if (input.trim()) {
       onSendMessage(input);
@@ -11,6 +19,7 @@ const InputArea = ({ onSendMessage }) => {
     }
   };
 
+  // Return the JSX for the component
   return (
     <div className="InputArea" style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}>
       <input
@@ -26,4 +35,5 @@ const InputArea = ({ onSendMessage }) => {
   );
 };
 
+// Export the component
 export default InputArea;
