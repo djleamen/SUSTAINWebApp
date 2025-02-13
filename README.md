@@ -1,8 +1,8 @@
 # 🌱 SUSTAIN: The Environmentally-Friendly AI Wrapper 🌱
 
 <picture>
-  <source srcset="/SUSTAINWebApp/SUSTAINOriginalWhiteTransparentCropped.png" media="(prefers-color-scheme: dark)">
-  <img src="/SUSTAINWebApp/SUSTAINOriginalBlackTransparentCropped.png" alt="SUSTAIN logo">
+  <source srcset="SUSTAINOriginalWhiteTransparentCropped.png" media="(prefers-color-scheme: dark)">
+  <img src="SUSTAINOriginalBlackTransparentCropped.png" alt="SUSTAIN logo">
 </picture>
 
 ## Overview
