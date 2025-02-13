@@ -1,0 +1,32 @@
+.InputArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.InputArea input {
+  width: 70%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-family: "Lexend", sans-serif;
+}
+
+.InputArea button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CC97B;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  font-family: "Lexend", sans-serif;
+}
+
+.InputArea button:hover {
+  background-color: #3FA967;
+}

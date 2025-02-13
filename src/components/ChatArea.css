@@ -1,0 +1,71 @@
+.ChatArea {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 80vw; /* ✅ Expands to 80% of the screen */
+  max-width: 900px; /* ✅ Prevents it from getting too wide */
+  margin: auto; /* ✅ Centers it */
+  font-size: 20px; /* ✅ Increases text size */
+  font-family: "Lexend", monospace;
+  height: 65vh; /* ✅ Uses more vertical space */
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+}
+
+/* ✅ Increases padding for chat bubbles */
+.message-container {
+  display: flex;
+  margin-bottom: 15px;
+  padding: 8px 12px;
+}
+
+.user-message, .sustain-message {
+  display: inline-block; /* Auto-resize based on text length */
+  max-width: 60%; /* Prevent bubbles from being too wide */
+  min-width: 10%; /* Avoid bubbles being too small */
+  word-wrap: break-word; /* Ensure long words wrap correctly */
+  white-space: normal; /* Allow normal text wrapping */
+  padding: 14px 18px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Courier", monospace;
+}
+
+/* ✅ Keep user messages aligned right */
+.user-message {
+  background-color: #4CAF50;
+  color: white;
+  align-self: flex-end;
+  text-align: left;
+}
+
+/* ✅ Keep SUSTAIN messages aligned left */
+.sustain-message {
+  background-color: #D4EDDA;
+  color: #155724;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.message-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.message-container.user {
+  justify-content: flex-end;
+}
+
+.savings-text {
+  font-size: 14px;
+  color: grey;
+  margin-top: 3px;
+  font-style: italic;
+  text-align: left;
+  padding-left: 15px;
+}
