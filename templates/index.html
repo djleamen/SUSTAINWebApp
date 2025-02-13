@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUSTAIN Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #chat-container {
+            width: 80%;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        #chat-area {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #send-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+        #token-savings {
+            margin-top: 10px;
+            color: green;
+        }
+        #logo {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+        #welcome-message {
+            margin-bottom: 20px;
+            color: grey;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <img id="logo" src="{{ url_for('static', filename='images/sustain_logo.png') }}" alt="SUSTAIN Logo">
+        <div id="welcome-message">Welcome to SUSTAIN Chat! Ask me: "What is SUSTAIN?" to learn more.</div>
+        <div id="chat-area"></div>
+        <input type="text" id="user-input" placeholder="Type your message here...">
+        <button id="send-button">Send</button>
+        <div id="token-savings">Average token savings: 0.00%. Thank you for going green!</div>
+    </div>
+    <script>
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        let totalPercentageSaved = 0;
+        let messageCount = 0;
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput) {
+                displayMessage('You: ' + userInput);
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userInput })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response) {
+                        displayMessage('SUSTAIN: ' + data.response);
+                        displaySettingsMessage(`With SUSTAIN, you saved ${data.percentage_saved.toFixed(2)}% more tokens compared to traditional AI!`);
+                        updateTokenSavings(data.percentage_saved);
+                    } else if (data.error) {
+                        displayMessage('Error: ' + data.error);
+                    }
+                });
+                document.getElementById('user-input').value = '';
+            }
+        }
+
+        function displayMessage(message) {
+            const chatArea = document.getElementById('chat-area');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatArea.appendChild(messageElement);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function displaySettingsMessage(message) {
+            const chatArea = document.getElementById('chat-area');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messageElement.style.color = 'grey';
+            chatArea.appendChild(messageElement);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function updateTokenSavings(percentageSaved) {
+            messageCount += 1;
+            totalPercentageSaved += percentageSaved;
+            const averageSavings = totalPercentageSaved / messageCount;
+            document.getElementById('token-savings').textContent = `Average token savings: ${averageSavings.toFixed(2)}%. Thank you for going green!`;
+        }
+    </script>
+</body>
+</html>
