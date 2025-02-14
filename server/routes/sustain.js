@@ -33,6 +33,16 @@ fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
   }
 });
 
+// In-memory cache (Stores prompt → response pairs)
+const responseCache = new Map();
+
+// Constants for CO₂ calculation (Matches Python version)
+const ENERGY_PER_TOKEN = 0.000002; // kWh per token
+const CO2_PER_KWH = 0.4; // kg CO₂ per kWh
+
+// Store accumulated token savings
+let totalTokensSaved = 0;
+
 // Function to escape special characters in a string for regex
 const escapeRegex = (phrase) => phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
@@ -81,11 +91,20 @@ const applyContractions = (text) => {
 router.post('/', async (req, res) => {
   const { userInput } = req.body;
 
-  // Keep predefined response for "What is SUSTAIN?"
+  // Predefined response for "What is SUSTAIN?"
   if (userInput.trim().toLowerCase() === "what is sustain?") {
     return res.json({
       responseText: "I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. I filter out irrelevant words and phrases from prompts and limit responses to essential outputs, minimizing the number of tokens used.",
       percentageSaved: 0
+    });
+  }
+
+  // Check if response is cached
+  if (responseCache.has(userInput)) {
+    console.log(`Cache hit for: "${userInput}"`);
+    return res.json({
+      responseText: responseCache.get(userInput),
+      percentageSaved: 100, // Cached responses save 100% tokens
     });
   }
 
@@ -98,7 +117,7 @@ router.post('/', async (req, res) => {
 
     // Remove stopwords if `phrasesToRemove` is not empty
     if (phrasesToRemove.length > 0) {
-      const safePhrases = phrasesToRemove.map(escapeRegex); 
+      const safePhrases = phrasesToRemove.map(escapeRegex);
       if (safePhrases.length > 0) {
         const regex = new RegExp(`\\b(${safePhrases.join("|")})\\b`, 'gi');
         optimizedInput = optimizedInput.replace(regex, '').trim();
@@ -107,11 +126,11 @@ router.post('/', async (req, res) => {
 
     const optimizedInputLength = optimizedInput.split(/\s+/).length;
 
-    // Estimate token savings based on input optimization
+    // Estimate token savings
     const inputSavings = ((originalInputLength - optimizedInputLength) / originalInputLength) * 100;
     const totalSavings = Number(inputSavings.toFixed(2));
 
-    // Send only the optimized input to OpenAI (NO extra request)
+    // Send only optimized input to OpenAI
     const sustainResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: optimizedInput + " in <20 words." }],
@@ -120,7 +139,14 @@ router.post('/', async (req, res) => {
 
     const sustainOutputText = sustainResponse.choices[0].message.content.trim();
 
-    // Send optimized response with calculated savings
+    // Store response in cache
+    responseCache.set(userInput, sustainOutputText);
+
+    // Update total tokens saved (Input + Output savings)
+    const tokensSaved = originalInputLength - optimizedInputLength + 50;
+    totalTokensSaved += tokensSaved;
+
+    // Send optimized response
     res.json({
       responseText: sustainOutputText,
       percentageSaved: totalSavings
@@ -132,5 +158,16 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Export the router
+// Route to calculate CO₂ savings
+router.get('/co2-savings', (req, res) => {
+  // Calculate energy saved and CO₂ reduction based on tokens saved
+  const energySaved = totalTokensSaved * ENERGY_PER_TOKEN * 365;
+  const co2Saved = (energySaved * CO2_PER_KWH).toFixed(4);
+
+  res.json({
+    totalKwhSaved: energySaved.toFixed(4),
+    totalCo2Saved: co2Saved
+  });
+});
+
 module.exports = router;
