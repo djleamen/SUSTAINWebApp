@@ -5,16 +5,17 @@ Description: This file is the entry point for the server. It sets up the server 
 // Required modules
 const express = require('express');
 const cors = require('cors');
-const app = express();
-const sustainRoute = require('./routes/sustain'); // Ensure correct path
+const sustainRoutes = require('./routes/sustain');
 
-// Middleware
+const app = express();
+const PORT = process.env.PORT || 3001;
+
 app.use(cors());
 app.use(express.json());
-app.use('/api/sustain', sustainRoute);
 
-// Error handler
-const PORT = process.env.PORT || 3001;
+// Ensure this line mounts ALL sustain.js routes
+app.use('/api/sustain', sustainRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

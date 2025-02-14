@@ -3,11 +3,18 @@
 */
 
 // Required imports
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './ChatArea.css';
 
 // Display the chat messages
 const ChatArea = ({ messages }) => {
+  const chatEndRef = useRef(null);
+
+  // Scroll to the bottom whenever messages change
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <div className="ChatArea">
       {messages.map((msg, index) => (
@@ -23,6 +30,7 @@ const ChatArea = ({ messages }) => {
         )}
         </div>
       ))}
+      <div ref={chatEndRef} />
     </div>
   );
 };

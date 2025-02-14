@@ -14,6 +14,7 @@ Description: This file contains the CSS styles for the ChatArea component.
   font-family: "Lexend", monospace;
   height: 65vh; 
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
   border-radius: 10px;
   border: 1px solid #ddd;
   background-color: #f8f8f8;
@@ -36,11 +37,11 @@ Description: This file contains the CSS styles for the ChatArea component.
   border-radius: 20px;
   font-size: 18px;
   font-weight: bold;
-  font-family: "Courier", monospace;
+  font-family: "Lexend", monospace;
 }
 
 .user-message {
-  background-color: #4CAF50;
+  background-color: #4CAD75;
   color: white;
   align-self: flex-end;
   text-align: left;

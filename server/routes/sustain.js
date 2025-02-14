@@ -33,8 +33,15 @@ fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
   }
 });
 
-// Simple in-memory cache (Stores prompt → response pairs)
+// In-memory cache (Stores prompt → response pairs)
 const responseCache = new Map();
+
+// Constants for CO₂ calculation (Matches Python version)
+const ENERGY_PER_TOKEN = 0.000002; // kWh per token
+const CO2_PER_KWH = 0.4; // kg CO₂ per kWh
+
+// Store accumulated token savings
+let totalTokensSaved = 0;
 
 // Function to escape special characters in a string for regex
 const escapeRegex = (phrase) => phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -94,10 +101,10 @@ router.post('/', async (req, res) => {
 
   // Check if response is cached
   if (responseCache.has(userInput)) {
-    console.log(`Cache hit for: "${userInput}"`); // Debug log
+    console.log(`Cache hit for: "${userInput}"`);
     return res.json({
       responseText: responseCache.get(userInput),
-      percentageSaved: 100 // Cached responses save 100% tokens
+      percentageSaved: 100, // Cached responses save 100% tokens
     });
   }
 
@@ -119,11 +126,11 @@ router.post('/', async (req, res) => {
 
     const optimizedInputLength = optimizedInput.split(/\s+/).length;
 
-    // Estimate token savings based on input optimization
+    // Estimate token savings
     const inputSavings = ((originalInputLength - optimizedInputLength) / originalInputLength) * 100;
     const totalSavings = Number(inputSavings.toFixed(2));
 
-    // Send only the optimized input to OpenAI (NO extra request)
+    // Send only optimized input to OpenAI
     const sustainResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: optimizedInput + " in <20 words." }],
@@ -132,10 +139,14 @@ router.post('/', async (req, res) => {
 
     const sustainOutputText = sustainResponse.choices[0].message.content.trim();
 
-    // Store response in cache for reuse
+    // Store response in cache
     responseCache.set(userInput, sustainOutputText);
 
-    // Send optimized response with calculated savings
+    // Update total tokens saved (Input + Output savings)
+    const tokensSaved = originalInputLength - optimizedInputLength + 50;
+    totalTokensSaved += tokensSaved;
+
+    // Send optimized response
     res.json({
       responseText: sustainOutputText,
       percentageSaved: totalSavings
@@ -147,5 +158,16 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Export the router
+// Route to calculate CO₂ savings
+router.get('/co2-savings', (req, res) => {
+  // Calculate energy saved and CO₂ reduction based on tokens saved
+  const energySaved = totalTokensSaved * ENERGY_PER_TOKEN * 365;
+  const co2Saved = (energySaved * CO2_PER_KWH).toFixed(4);
+
+  res.json({
+    totalKwhSaved: energySaved.toFixed(4),
+    totalCo2Saved: co2Saved
+  });
+});
+
 module.exports = router;

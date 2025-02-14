@@ -9,7 +9,6 @@ buttons in the header.
 
 // Required imports
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './App.css';
 import ChatArea from './components/ChatArea';
 import InputArea from './components/InputArea';
@@ -18,7 +17,6 @@ import InfoModal from './components/InfoModal';
 import SettingsModal from './components/SettingsModal';
 import { log, logError } from './utils/logger';
 
-// Main App component
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [totalPercentageSaved, setTotalPercentageSaved] = useState(0);
@@ -26,72 +24,88 @@ const App = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [co2Savings, setCo2Savings] = useState(null);
+  const [loadingCo2, setLoadingCo2] = useState(false);
 
-  // Log component lifecycle
+  // Load Dark Mode Preference from Local Storage
   useEffect(() => {
-    log('App component mounted');
-    return () => {
-      log('App component unmounted');
-    };
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedDarkMode);
+    log(`Dark mode loaded: ${savedDarkMode}`);
   }, []);
 
-  // Function to handle sending messages to the SUSTAIN API
+  // Toggle Dark Mode & Save Preference
+  const toggleDarkMode = () => {
+    setDarkMode(prevMode => {
+      const newMode = !prevMode;
+      localStorage.setItem("darkMode", newMode);
+      return newMode;
+    });
+  };
+
+  // Handle Sending Messages to SUSTAIN API
   const handleSendMessage = async (userInput) => {
-    setMessages([...messages, { sender: 'You', text: userInput }]);
     log(`User sent message: ${userInput}`);
-  
-    // Send message to SUSTAIN API
+
+    // Optimistically update UI
+    setMessages(prevMessages => [...prevMessages, { sender: 'You', text: userInput }]);
+
     try {
-      const url = 'http://localhost:3001/api/sustain';
-      log(`Sending POST request to: ${url}`);
-  
-      // Make a POST request to the SUSTAIN API
-      const response = await fetch(url, {
+      const response = await fetch('http://localhost:3001/api/sustain', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userInput }),
       });
-  
-      // Check for errors in the response
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      // Parse the JSON response
+
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
       const data = await response.json();
-      console.log("API Response:", data); // 🔍 Debugging: Check API response format
-  
-      // Check if the response format is as expected
-      if (!data.responseText || typeof data.percentageSaved !== "number") {
+      const { responseText, percentageSaved } = data;
+
+      // Ensure valid response format
+      if (!responseText || typeof percentageSaved !== "number") {
         console.error("Unexpected API response format:", data);
         return;
       }
-  
-      // Destructure the response data
-      const { responseText, percentageSaved } = data;
-      
-      // Update the chat area with the response
-      setMessages([...messages, 
-        { sender: 'You', text: userInput }, 
+
+      // Update Chat UI
+      setMessages(prevMessages => [
+        ...prevMessages,
         { sender: 'SUSTAIN', text: responseText, percentageSaved }
       ]);
-  
-      // Update the total percentage saved and message count
-      setTotalPercentageSaved(totalPercentageSaved + percentageSaved);
-      setMessageCount(messageCount + 1);
-      log(`SUSTAIN responded with: ${responseText}, Percentage saved: ${percentageSaved}`);
-  
-      // Log the average savings per message
+
+      // Update Token Savings
+      setTotalPercentageSaved(prevTotal => prevTotal + percentageSaved);
+      setMessageCount(prevCount => prevCount + 1);
+
+      log(`SUSTAIN responded: "${responseText}", Tokens saved: ${percentageSaved}%`);
     } catch (error) {
       logError(error);
       console.error('Error sending message:', error);
     }
   };
 
-  // Calculate the average savings per message
+  // Fetch CO₂ Savings
+  const fetchCo2Savings = async () => {
+    setLoadingCo2(true);
+    try {
+      const response = await fetch('http://localhost:3001/api/sustain/co2-savings');
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+      const data = await response.json();
+      setCo2Savings(data);
+      log(`CO₂ savings fetched: ${JSON.stringify(data)}`);
+    } catch (error) {
+      logError(error);
+      console.error("Failed to fetch CO₂ savings:", error);
+    } finally {
+      setLoadingCo2(false);
+    }
+  };
+
+  // Calculate Average Savings
   const averageSavings = messageCount > 0 ? (totalPercentageSaved / messageCount).toFixed(2) : 0;
 
-  // Return the JSX for the component
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <header className="App-header">
@@ -105,14 +119,26 @@ const App = () => {
           <button className="Settings-button" onClick={() => setShowSettings(true)}>⚙️</button>
         </div>
       </header>
+
+      {/* Chat Area & Input */}
       <ChatArea messages={messages} />
       <InputArea className={darkMode ? 'dark-mode' : 'light-mode'} onSendMessage={handleSendMessage} />
       <TokenSavings averageSavings={averageSavings} />
+
+      {/* Modals */}
       {showInfo && <InfoModal onClose={() => setShowInfo(false)} darkMode={darkMode} />}
-      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} darkMode={darkMode} setDarkMode={setDarkMode} />}
+      {showSettings && (
+        <SettingsModal
+          onClose={() => setShowSettings(false)}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          fetchCo2Savings={fetchCo2Savings}
+          co2Savings={co2Savings}
+          loadingCo2={loadingCo2}
+        />
+      )}
     </div>
   );
 };
 
-// Export the component
 export default App;
