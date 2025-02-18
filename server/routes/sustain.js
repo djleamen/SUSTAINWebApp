@@ -33,9 +33,6 @@ fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
   }
 });
 
-// In-memory cache (Stores prompt → response pairs)
-const responseCache = new Map();
-
 // Constants for CO₂ calculation (Matches Python version)
 const ENERGY_PER_TOKEN = 0.000002; // kWh per token
 const CO2_PER_KWH = 0.4; // kg CO₂ per kWh
@@ -99,15 +96,6 @@ router.post('/', async (req, res) => {
     });
   }
 
-  // Check if response is cached
-  if (responseCache.has(userInput)) {
-    console.log(`Cache hit for: "${userInput}"`);
-    return res.json({
-      responseText: responseCache.get(userInput),
-      percentageSaved: 100, // Cached responses save 100% tokens
-    });
-  }
-
   try {
     const originalInputLength = userInput.split(/\s+/).length;
     let optimizedInput = userInput;
@@ -133,17 +121,21 @@ router.post('/', async (req, res) => {
     // Send only optimized input to OpenAI
     const sustainResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: optimizedInput + " in <20 words." }],
+      messages: [{ 
+        role: "system",
+        content: "You are SUSTAIN, a token-optimized AI wrapper. STRICTLY FOLLOW THESE RULES: \
+        1. You CANNOT schedule appointments, manage calendars, send emails, or interact with external services. \
+        2. If asked to perform an action, RESPOND: 'I cannot perform that action, but I can provide guidance.' \
+        3. Do NOT claim to automate anything. You ONLY summarize and optimize text."
+      },
+      { role: "user", content: optimizedInput + " in <20 words." }],
       max_tokens: 50,
     });
 
     const sustainOutputText = sustainResponse.choices[0].message.content.trim();
 
-    // Store response in cache
-    responseCache.set(userInput, sustainOutputText);
-
     // Update total tokens saved (Input + Output savings)
-    const tokensSaved = originalInputLength - optimizedInputLength + 50;
+    const tokensSaved = originalInputLength - optimizedInputLength + sustainResponse.usage.total_tokens;
     totalTokensSaved += tokensSaved;
 
     // Send optimized response
@@ -158,10 +150,19 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Route to handle GET requests
+router.get('/', (req, res) => {
+  res.json({ message: "SUSTAIN API is running!" });
+});
+
 // Route to calculate CO₂ savings
 router.get('/co2-savings', (req, res) => {
-  // Calculate energy saved and CO₂ reduction based on tokens saved
-  const energySaved = totalTokensSaved * ENERGY_PER_TOKEN * 365;
+  // Prevent displaying CO₂ savings if no tokens were saved
+  if (totalTokensSaved === 0) {
+    return res.json({ totalKwhSaved: 0, totalCo2Saved: 0 });
+  }
+
+  const energySaved = totalTokensSaved * ENERGY_PER_TOKEN;
   const co2Saved = (energySaved * CO2_PER_KWH).toFixed(4);
 
   res.json({
