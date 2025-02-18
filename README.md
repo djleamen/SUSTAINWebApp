@@ -120,36 +120,13 @@ This will open a browser window where you can input your queries and receive res
 
 ---
 
-## Usage Example in Python
-```python
-from sustain import SUSTAIN
-
-# Initialize SUSTAIN
-sustain = SUSTAIN(api_key="your_openai_api_key")
-
-# Provide a verbose user input
-response = sustain.get_response("Hello, could you please brainstorm some key traits a leader should have?")
-
-# Output
-print(response)  # Returns a token-efficient response: "Integrity, vision, empathy, resilience"
-```
-
----
-
-## Configuration
-SUSTAIN offers flexible configurations to suit different workflows:
-- **Max Tokens:** Set the maximum response length.
-- **Summarization Level:** Control how much context is trimmed from the user input.
-
----
-
 ## Roadmap
 - [x] Implement dynamic summarization based on context length
 - [x] Provide additional eco-feedback on overall token savings
 - [x] Enhance the GUI with more user-friendly features and customization options
 - [x] Add save, clear chat features
 - [x] Implement caching for frequently requested queries to reduce API calls
-- [ ] Convert to web app and deploy on Azure
+- [x] Convert to web app and deploy on Azure
 - [ ] Convert to Android app
 
 ---
