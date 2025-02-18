@@ -60,7 +60,7 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl }) => {
         {/* Display CO₂ Savings Results */}
         {co2Savings && co2Savings.totalKwhSaved > 0 && (
           <p className="co2-text">
-            Together, using SUSTAIN, we have saved:
+            By uing SUSTAIN instead of traditional AI, you have saved:
             <br />
             🌱 {co2Savings.totalKwhSaved} kWh of power
             <br />

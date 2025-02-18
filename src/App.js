@@ -26,7 +26,7 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [co2Savings, setCo2Savings] = useState(null);
   const [loadingCo2, setLoadingCo2] = useState(false);
-  // const API_BASE_URL = 'https://sustain-backend.azurewebsites.net'; Strictly for reference
+  const API_BASE_URL = 'https://sustain-backend.azurewebsites.net';
 
   // Load Dark Mode Preference from Local Storage
   useEffect(() => {
@@ -52,7 +52,7 @@ const App = () => {
     setMessages(prevMessages => [...prevMessages, { sender: 'You', text: userInput }]);
 
     try {
-      // const response = await fetch(`${API_BASE_URL}/api/sustain`, { replace HERE with localhost
+      const response = await fetch(`${API_BASE_URL}/api/sustain`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userInput }),
@@ -90,7 +90,7 @@ const App = () => {
   const fetchCo2Savings = async () => {
     setLoadingCo2(true);
     try {
-      // const response = await fetch(`${API_BASE_URL}/api/sustain/co2-savings`); replace HERE with localhost
+      const response = await fetch(`${API_BASE_URL}/api/sustain/co2-savings`);
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
       const data = await response.json();
@@ -137,7 +137,7 @@ const App = () => {
           fetchCo2Savings={fetchCo2Savings}
           co2Savings={co2Savings}
           loadingCo2={loadingCo2}
-          //apiBaseUrl={API_BASE_URL}
+          apiBaseUrl={API_BASE_URL}
         />
       )}
     </div>
