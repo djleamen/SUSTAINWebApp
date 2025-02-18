@@ -1,0 +1,14 @@
+All of the updated SUSTAIN files can be found in this repository, minus dependencies for deploying on Azure,
+which are kept in the private repository. See missing files here (shouldn't make an impact if testing locally!)
+
+Folders and files missing:
+    .github/workflows > main_sustain-app.yml (builds and deploys Node.js app to to Azure Web App)
+    build (static build files)
+    node_modules (install by running `npm install`)
+    public
+        web.config (for React Routes)
+    server
+        .azure (azure config)
+        node_modules (install by running `npm install`)
+        package-lock.json (backend run)
+        package.json (backend run)

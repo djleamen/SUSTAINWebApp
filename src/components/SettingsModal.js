@@ -7,7 +7,7 @@ It has buttons for toggling dark mode and calculating CO₂ savings.
 import React, { useState, useEffect } from 'react';
 import './SettingsModal.css';
 
-const SettingsModal = ({ onClose, darkMode, setDarkMode }) => {
+const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl }) => {
   const [co2Savings, setCo2Savings] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,9 +27,9 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode }) => {
   const fetchCo2Savings = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/sustain/co2-savings');
+      const response = await fetch(`${apiBaseUrl}/api/sustain/co2-savings`);  // Use apiBaseUrl instead of API_BASE_URL
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      
+  
       const data = await response.json();
       setCo2Savings(data);
     } catch (error) {
@@ -58,15 +58,15 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode }) => {
         </button>
 
         {/* Display CO₂ Savings Results */}
-        {co2Savings && (
+        {co2Savings && co2Savings.totalKwhSaved > 0 && (
           <p className="co2-text">
-            If you keep using SUSTAIN at this pace for a year, you'll save:
+            Together, using SUSTAIN, we have saved:
             <br />
             🌱 {co2Savings.totalKwhSaved} kWh of power
             <br />
             🌍 {co2Savings.totalCo2Saved} metric tons of CO₂ emissions
-          </p>
-        )}
+            </p>
+          )}
       </div>
     </div>
   );
