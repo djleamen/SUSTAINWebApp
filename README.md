@@ -1,4 +1,4 @@
-# 🌱 SUSTAIN: The Environmentally-Friendly AI Wrapper 🌱
+# 🌱 SUSTAIN: The Environmentally-Friendly AI 🌱
 
 <picture>
   <source srcset="SUSTAINOriginalWhiteTransparentCropped.png" media="(prefers-color-scheme: dark)">
