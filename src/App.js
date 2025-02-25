@@ -16,7 +16,9 @@ import TokenSavings from './components/TokenSavings';
 import InfoModal from './components/InfoModal';
 import SettingsModal from './components/SettingsModal';
 import { log, logError } from './utils/logger';
+import MathOptimizer from './utils/MathOptimizer';
 
+// App component
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [totalPercentageSaved, setTotalPercentageSaved] = useState(0);
@@ -27,6 +29,8 @@ const App = () => {
   const [co2Savings, setCo2Savings] = useState(null);
   const [loadingCo2, setLoadingCo2] = useState(false);
   const API_BASE_URL = 'https://sustain-backend.azurewebsites.net';
+
+  const mathOptimizer = new MathOptimizer(); 
 
   // Load Dark Mode Preference from Local Storage
   useEffect(() => {
@@ -51,6 +55,17 @@ const App = () => {
     // Optimistically update UI
     setMessages(prevMessages => [...prevMessages, { sender: 'You', text: userInput }]);
 
+    // Check if the input is a math expression and solve it locally
+    if (mathOptimizer.recognizeMath(userInput)) {
+      const result = mathOptimizer.solveMath(userInput);
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { sender: 'SUSTAIN', text: `Math detected! Result: ${result}`, percentageSaved: 100 }
+      ]);
+      return;
+    }
+
+    // Send message to SUSTAIN API
     try {
       const response = await fetch(`${API_BASE_URL}/api/sustain`, { 
         method: "POST",
@@ -58,6 +73,7 @@ const App = () => {
         body: JSON.stringify({ userInput }),
       });
 
+      // Handle API errors
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
       const data = await response.json();
@@ -79,6 +95,7 @@ const App = () => {
       setTotalPercentageSaved(prevTotal => prevTotal + percentageSaved);
       setMessageCount(prevCount => prevCount + 1);
 
+      // Log response and savings
       log(`SUSTAIN responded: "${responseText}", Tokens saved: ${percentageSaved}%`);
     } catch (error) {
       logError(error);
@@ -107,6 +124,7 @@ const App = () => {
   // Calculate Average Savings
   const averageSavings = messageCount > 0 ? (totalPercentageSaved / messageCount).toFixed(2) : 0;
 
+  // Render App
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <header className="App-header">
