@@ -11,29 +11,32 @@ import './InputArea.css';
 const InputArea = ({ onSendMessage }) => {
   const [input, setInput] = useState('');
 
-  // Handle sending the message
-  const handleSend = () => {
+  // Function to handle the input change
+  const handleChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  // Function to handle the text submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (input.trim()) {
       onSendMessage(input);
       setInput('');
     }
   };
 
-  // Return the JSX for the component
+  // Return the input area
   return (
-    <div className="InputArea" style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}>
+    <form className="InputArea" onSubmit={handleSubmit}>
       <input
         type="text"
         value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-        placeholder="Type your message..."
-        style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}
+        onChange={handleChange}
+        placeholder="Type your message here..."
       />
-      <button onClick={handleSend} style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}>Send</button>
-    </div>
+      <button type="submit">Send</button>
+    </form>
   );
 };
 
-// Export the component
 export default InputArea;
