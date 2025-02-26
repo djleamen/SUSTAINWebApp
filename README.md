@@ -89,7 +89,7 @@ For questions or suggestions, feel free to reach out to us:
 
 [GitHub (Desktop)](https://github.com/djleamen/SUSTAIN)
 
-[GitHub (Web)](https://github.com/djleamen/SUSTAINWebApp)
+[GitHub (Web)](https://github.com/Tomasz0720/SUSTAINWebApp)
 
 
 Let’s build a more sustainable AI future together!
