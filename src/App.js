@@ -1,13 +1,3 @@
-/*
-Description: This is the main component of the application. It contains the chat area, 
-input area, token savings, info modal, and settings modal components. It also contains 
-the logic for sending messages to the SUSTAIN API and updating the chat area with the 
-response. The average savings per message is calculated and displayed in the token savings 
-component. The info modal and settings modal can be opened by clicking on the respective 
-buttons in the header.
-*/
-
-// Required imports
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import ChatArea from './components/ChatArea';
@@ -17,8 +7,8 @@ import InfoModal from './components/InfoModal';
 import SettingsModal from './components/SettingsModal';
 import { log, logError } from './utils/logger';
 import MathOptimizer from './utils/MathOptimizer';
+import axios from 'axios';
 
-// App component
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [totalPercentageSaved, setTotalPercentageSaved] = useState(0);
@@ -28,6 +18,9 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [co2Savings, setCo2Savings] = useState(null);
   const [loadingCo2, setLoadingCo2] = useState(false);
+  const [model, setModel] = useState('gpt-3.5-turbo');
+  const [previousModel, setPreviousModel] = useState('gpt-3.5-turbo');
+  const [isMobile, setIsMobile] = useState(false);
   const API_BASE_URL = 'https://sustain-backend.azurewebsites.net';
 
   const mathOptimizer = new MathOptimizer(); 
@@ -37,6 +30,19 @@ const App = () => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
     log(`Dark mode loaded: ${savedDarkMode}`);
+  }, []);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
   }, []);
 
   // Toggle Dark Mode & Save Preference
@@ -51,10 +57,10 @@ const App = () => {
   // Handle Sending Messages to SUSTAIN API
   const handleSendMessage = async (userInput) => {
     log(`User sent message: ${userInput}`);
-
+  
     // Optimistically update UI
     setMessages(prevMessages => [...prevMessages, { sender: 'You', text: userInput }]);
-
+  
     // Check if the input is a math expression and solve it locally
     if (mathOptimizer.recognizeMath(userInput)) {
       const result = mathOptimizer.solveMath(userInput);
@@ -62,40 +68,42 @@ const App = () => {
         ...prevMessages,
         { sender: 'SUSTAIN', text: `Math detected! Result: ${result}`, percentageSaved: 100 }
       ]);
+  
+      // Update Token Savings
+      setTotalPercentageSaved(prevTotal => prevTotal + 100);
+      setMessageCount(prevCount => prevCount + 1);
+  
       return;
     }
-
-    // Send message to SUSTAIN API
+  
     try {
       const response = await fetch(`${API_BASE_URL}/api/sustain`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userInput }),
+        body: JSON.stringify({ userInput, model }),
       });
-
-      // Handle API errors
+  
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
+  
       const data = await response.json();
       const { responseText, percentageSaved } = data;
-
+  
       // Ensure valid response format
       if (!responseText || typeof percentageSaved !== "number") {
         console.error("Unexpected API response format:", data);
         return;
       }
-
+  
       // Update Chat UI
       setMessages(prevMessages => [
         ...prevMessages,
         { sender: 'SUSTAIN', text: responseText, percentageSaved }
       ]);
-
+  
       // Update Token Savings
       setTotalPercentageSaved(prevTotal => prevTotal + percentageSaved);
       setMessageCount(prevCount => prevCount + 1);
-
-      // Log response and savings
+  
       log(`SUSTAIN responded: "${responseText}", Tokens saved: ${percentageSaved}%`);
     } catch (error) {
       logError(error);
@@ -121,10 +129,30 @@ const App = () => {
     }
   };
 
+  // Handle Model Change
+  const handleModelChange = (newModel) => {
+    setModel(newModel);
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { sender: 'System', text: `Now using ${newModel}`, system: true }
+    ]);
+    setPreviousModel(newModel);
+  };
+
   // Calculate Average Savings
   const averageSavings = messageCount > 0 ? (totalPercentageSaved / messageCount).toFixed(2) : 0;
 
-  // Render App
+  if (isMobile) {
+    return (
+      <div className="overlay">
+        <div className="overlay-content">
+          <h2>Desktop Only</h2>
+          <p>SUSTAIN is only available on desktop. Please visit us on a desktop device.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <header className="App-header">
@@ -156,6 +184,8 @@ const App = () => {
           co2Savings={co2Savings}
           loadingCo2={loadingCo2}
           apiBaseUrl={API_BASE_URL}
+          model={model}
+          setModel={handleModelChange}
         />
       )}
     </div>

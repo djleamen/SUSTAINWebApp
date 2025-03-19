@@ -84,15 +84,61 @@ const applyContractions = (text) => {
   return contractedText;
 };
 
+const isMathOptimization = (input) => {
+  const mathRegex = /^(\d+)\s*([\+\-\*\/])\s*(\d+)$/;
+  const match = input.match(mathRegex);
+  if (match) {
+    const num1 = parseFloat(match[1]);
+    const operator = match[2];
+    const num2 = parseFloat(match[3]);
+    let result;
+
+    switch (operator) {
+      case '+':
+        result = num1 + num2;
+        break;
+      case '-':
+        result = num1 - num2;
+        break;
+      case '*':
+        result = num1 * num2;
+        break;
+      case '/':
+        result = num1 / num2;
+        break;
+      default:
+        return null;
+    }
+
+    return result;
+  }
+  return null;
+};
+
+// Model energy consumption mapping
+const MODEL_ENERGY_CONSUMPTION = {
+  'gpt-3.5-turbo': 0.000002,
+  'gpt-4o': 0.000003,
+};
+
 // Route to handle POST requests
 router.post('/', async (req, res) => {
-  const { userInput } = req.body;
+  const { userInput, model } = req.body;
 
   // Predefined response for "What is SUSTAIN?"
   if (userInput.trim().toLowerCase() === "what is sustain?") {
     return res.json({
       responseText: "I am SUSTAIN, an environmentally-friendly, token-optimized AI wrapper designed to reduce compute costs and increase productivity. I filter out irrelevant words and phrases from prompts and limit responses to essential outputs, minimizing the number of tokens used.",
       percentageSaved: 0
+    });
+  }
+
+  // Check for math optimization
+  const mathResult = isMathOptimization(userInput.trim());
+  if (mathResult !== null) {
+    return res.json({
+      responseText: `Math detected! Result: ${mathResult}`,
+      percentageSaved: 100 // Assuming 100% token savings for math optimizations
     });
   }
 
@@ -118,9 +164,12 @@ router.post('/', async (req, res) => {
     const inputSavings = ((originalInputLength - optimizedInputLength) / originalInputLength) * 100;
     const totalSavings = Number(inputSavings.toFixed(2));
 
+    // Determine energy consumption per token for the selected model
+    const energyPerToken = MODEL_ENERGY_CONSUMPTION[model] || MODEL_ENERGY_CONSUMPTION['gpt-3.5-turbo'];
+
     // Send only optimized input to OpenAI
     const sustainResponse = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: model || 'gpt-3.5-turbo',
       messages: [{ 
         role: "system",
         content: "You are SUSTAIN, a token-optimized AI wrapper. STRICTLY FOLLOW THESE RULES: \
@@ -138,10 +187,16 @@ router.post('/', async (req, res) => {
     const tokensSaved = originalInputLength - optimizedInputLength + sustainResponse.usage.total_tokens;
     totalTokensSaved += tokensSaved;
 
+    // Calculate energy and CO₂ savings
+    const energyUsed = tokensSaved * energyPerToken;
+    const co2Emissions = energyUsed * CO2_PER_KWH;
+
     // Send optimized response
     res.json({
       responseText: sustainOutputText,
-      percentageSaved: totalSavings
+      percentageSaved: totalSavings,
+      energyUsed: energyUsed.toFixed(4),
+      co2Emissions: co2Emissions.toFixed(4)
     });
 
   } catch (error) {

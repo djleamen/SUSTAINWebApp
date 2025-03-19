@@ -7,7 +7,7 @@ It has buttons for toggling dark mode and calculating CO₂ savings.
 import React, { useState, useEffect } from 'react';
 import './SettingsModal.css';
 
-const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl }) => {
+const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setModel }) => {
   const [co2Savings, setCo2Savings] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +39,12 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl }) => {
     }
   };
 
+  // Handle Model Change
+  const handleModelChange = (e) => {
+    const newModel = e.target.value;
+    setModel(newModel);
+  };
+
   return (
     <div className="SettingsModal" onClick={onClose}>
       <div 
@@ -46,30 +52,39 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl }) => {
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >
         <h2 className="settings-header">Settings</h2>
-
+  
+        {/* Model Selection - Styled as a Green Bubble */}
+        <div className="model-selector-container">
+          <label htmlFor="model-select">Choose Model:</label>
+           <select id="model-select" value={model} onChange={handleModelChange}>
+            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+           <option value="gpt-4o">GPT-4o</option>
+          </select>
+        </div>
+  
         {/* Dark Mode Toggle */}
         <button onClick={toggleDarkMode} className="dark-mode-toggle">
           {darkMode ? "🌙 Dark Mode Enabled" : "☀️ Light Mode Enabled"}
         </button>
-
+  
         {/* CO₂ Savings Button */}
         <button onClick={fetchCo2Savings} className="calculate-co2-button">
           {loading ? "Calculating..." : "Calculate CO₂ Savings"}
         </button>
-
+  
         {/* Display CO₂ Savings Results */}
         {co2Savings && co2Savings.totalKwhSaved > 0 && (
           <p className="co2-text">
-            By uing SUSTAIN instead of traditional AI, you have saved:
+            By using SUSTAIN instead of traditional AI, you have saved:
             <br />
             🌱 {co2Savings.totalKwhSaved} kWh of power
             <br />
             🌍 {co2Savings.totalCo2Saved} metric tons of CO₂ emissions
-            </p>
-          )}
+          </p>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default SettingsModal;

@@ -19,15 +19,15 @@ const InfoModal = ({ onClose, darkMode }) => {
   return (
     <div className="InfoModal" onClick={handleClickOutside}>
       <div className={`InfoModal-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-        <h2>Information</h2>
+        <h2><strong>Information</strong></h2>
         <p>Welcome to SUSTAIN Chat!</p>
-        <p>How to use:</p>
+        <p><strong>How to use:</strong></p>
         <ul>
           <li>Type your message in the text box at the bottom of the window.</li>
           <li>Press Enter to send your message to SUSTAIN.</li>
           <li>SUSTAIN will respond with an optimized message.</li>
         </ul>
-        <p>FAQs:</p>
+        <h3>FAQs:</h3>
         <p><strong>What is a token?</strong></p>
         <p>A token is a unit of text that the AI processes. Tokens can be as short as one character or as long as one word.</p>
         <p><strong>Ethics Policy:</strong></p>

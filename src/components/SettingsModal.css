@@ -3,6 +3,7 @@ Description: Styles for the SettingsModal component
 */
 
 /* Modal background (closes on outside click) */
+/* Modal Background */
 .SettingsModal {
   position: fixed;
   top: 0;
@@ -15,20 +16,21 @@ Description: Styles for the SettingsModal component
   align-items: center;
 }
 
-/* Modal content (light & dark mode support) */
+/* Modal Content */
 .SettingsModal-content {
   background: white;
   padding: 30px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 600px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
   text-align: center;
   font-family: "Lexend", sans-serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Dark Mode */
 .SettingsModal-content.dark-mode {
-  background: #222;  /* Darker background */
+  background: #222;
   color: white;
 }
 
@@ -40,48 +42,48 @@ Description: Styles for the SettingsModal component
 
 /* Settings Header */
 .settings-header {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
   font-family: "Lexend", sans-serif;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-/* Buttons */
-/* Buttons */
+/* Buttons Styling */
 .dark-mode-toggle, .calculate-co2-button {
-  padding: 12px 20px;
+  width: 366px;
+  padding: 14px;
   font-size: 16px;
+  font-weight: bold;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
   font-family: "Lexend", sans-serif;
-  margin-bottom: 20px; /* Add spacing below */
-  margin-right: 10px; /* Add spacing between buttons */
+  margin-bottom: 18px;
 }
 
 /* Dark Mode Button */
 .dark-mode-toggle {
   background-color: #4CAD75;
   color: white;
-  margin-bottom: 30px; /* Ensure spacing between buttons */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode-toggle:hover {
-  background-color: #0E4D3D; /* Darker color on hover */
+  background-color: #0E4D3D;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* CO₂ Savings Button */
 .calculate-co2-button {
   background-color: #4C7661;
   color: white;
-  margin-top: 0; /* Remove top margin to avoid extra space */
-  margin-right: 0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* CO₂ Savings Button */
 .calculate-co2-button:hover {
-  background-color: #2E3D34; /* Change color on hover */
+  background-color: #2E3D34;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* CO₂ Savings Text */
@@ -95,4 +97,50 @@ Description: Styles for the SettingsModal component
 /* Dark Mode Styles for Text */
 .dark-mode .co2-text {
   color: #ddd;
+}
+
+/* Model Selector Styled as a Bubble */
+.model-selector-container {
+  background-color: #4CAD75;  /* Green like other buttons */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%;
+  max-width: 320px; /* Matches button widths */
+  margin: 0 auto 20px auto; /* Centering */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown (Styled to Blend In) */
+.model-selector-container select {
+  background: white;
+  color: black;
+  border: none;
+  padding: 6px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .SettingsModal-content {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .dark-mode-toggle, .calculate-co2-button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .model-selector select {
+    width: 100%;
+  }
 }

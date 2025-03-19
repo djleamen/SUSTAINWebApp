@@ -54,6 +54,15 @@ Description: This file contains the CSS styles for the ChatArea component.
   text-align: left;
 }
 
+.system-message {
+  text-align: center;
+  font-size: 16px;
+  color: grey;
+  font-style: italic;
+  margin-top: 10px 0;
+  margin-left: 5px;
+}
+
 .message-container {
   display: flex;
   justify-content: flex-start;

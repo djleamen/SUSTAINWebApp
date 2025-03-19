@@ -1,6 +1,3 @@
-/* Description: This file contains the MathOptimizer class, which is a utility class that helps optimize math expressions. */
-
-// MathOptimizer class definition
 class MathOptimizer {
     constructor() {
       this.wordToOperator = {
@@ -16,7 +13,6 @@ class MathOptimizer {
         '^': '**'
       };
   
-      // Word to number conversion
       this.wordToNumber = {
         'zero': 0,
         'one': 1,
@@ -32,7 +28,6 @@ class MathOptimizer {
       };
     }
   
-    // Function to clean the input
     cleanInput(userInput) {
       userInput = userInput.replace(/^(what is|what's|whats|please|can you|please tell me)\s*/i, '');
       userInput = userInput.replace(/[^\w\s+\-*/^()]/g, '');
@@ -40,21 +35,18 @@ class MathOptimizer {
       return userInput;
     }
   
-    // Function to recognize math expressions
     recognizeMath(userInput) {
       const mathPattern = /(\d+|\w+)\s*(\+|\-|\*|\/|\bplus\b|\bminus\b|\btimes\b|\bdivided\b|\bto\s+the\s+power\s+of\b|\^)\s*(\d+|\w+)/i;
       return mathPattern.test(userInput);
     }
   
-    // Function to convert words to numbers
     convertWordsToNumbers(userInput) {
       for (const [word, number] of Object.entries(this.wordToNumber)) {
         userInput = userInput.replace(new RegExp(`\\b${word}\\b`, 'gi'), number);
       }
       return userInput;
     }
-    
-    // Function to convert operators
+  
     convertOps(userInput) {
       // Convert basic operators first
       for (const [word, operator] of Object.entries(this.wordToOperator)) {
@@ -68,15 +60,13 @@ class MathOptimizer {
       return userInput;
     }
   
-    // Function to optimize math expressions
     solveMath(userInput) {
       userInput = this.cleanInput(userInput);
       userInput = this.convertWordsToNumbers(userInput);
       userInput = this.convertOps(userInput);
-    // debug line
+  
       console.log(`Sanitized input: ${userInput}`); // Debugging line
   
-      // Evaluate the math expression
       try {
         if (/^[\d+\-*/(). ]+$/.test(userInput)) {
           const result = eval(userInput);

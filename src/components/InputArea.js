@@ -7,16 +7,13 @@ simple input field and a button to send the message.
 import React, { useState } from 'react';
 import './InputArea.css';
 
-// InputArea component
 const InputArea = ({ onSendMessage }) => {
   const [input, setInput] = useState('');
 
-  // Function to handle the input change
   const handleChange = (e) => {
     setInput(e.target.value);
   };
 
-  // Function to handle the text submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.trim()) {
@@ -25,7 +22,6 @@ const InputArea = ({ onSendMessage }) => {
     }
   };
 
-  // Return the input area
   return (
     <form className="InputArea" onSubmit={handleSubmit}>
       <input
