@@ -1,5 +1,12 @@
 # 🌱 SUSTAIN: The Environmentally-Friendly AI 🌱
 
+![Backend](https://img.shields.io/badge/Backend-Express.js-orange)
+![Frontend](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)
+![Hosting](https://img.shields.io/badge/Hosting-Azure-0078D4?logo=microsoftazure)
+![API](https://img.shields.io/badge/API-OpenAI-informational)
+![License](https://img.shields.io/badge/license-MIT--0-lightgrey)
+![Last Commit](https://img.shields.io/github/last-commit/djleamen/SUSTAIN)
+
 <picture>
   <source srcset="SUSTAINOriginalWhiteTransparentCropped.png" media="(prefers-color-scheme: dark)">
   <img src="SUSTAINOriginalBlackTransparentCropped.png" alt="SUSTAIN logo">
