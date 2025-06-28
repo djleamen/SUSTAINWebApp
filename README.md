@@ -1,5 +1,6 @@
 # 🌱 SUSTAIN: The Environmentally-Friendly AI 🌱
 
+![Status](https://img.shields.io/badge/Status-Offline-red)
 ![Backend](https://img.shields.io/badge/Backend-Express.js-orange)
 ![Frontend](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)
 ![Hosting](https://img.shields.io/badge/Hosting-Azure-0078D4?logo=microsoftazure)
@@ -93,7 +94,6 @@ For questions or suggestions, feel free to reach out to us:
 ---
 
 ## Links
-[Try it out!](https://sustainai.ca)
 
 [GitHub (Desktop)](https://github.com/djleamen/SUSTAIN)
 
