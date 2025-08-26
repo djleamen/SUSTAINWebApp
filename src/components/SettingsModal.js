@@ -5,6 +5,7 @@ It has buttons for toggling dark mode and calculating CO₂ savings.
 
 // Required imports
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './SettingsModal.css';
 
 const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setModel }) => {
@@ -21,7 +22,7 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
-  }, []);
+  }, [setDarkMode]);
 
   // Fetch CO₂ Savings
   const fetchCo2Savings = async () => {
@@ -45,13 +46,29 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
     setModel(newModel);
   };
 
+  // Handle keyboard events for accessibility
+  const handleKeyDown = (event, callback) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      callback();
+    }
+  };
+
   return (
-    <div className="SettingsModal" onClick={onClose}>
+    <div 
+      className="SettingsModal" 
+      onClick={onClose}
+      onKeyDown={(e) => handleKeyDown(e, onClose)}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-header"
+    >
       <div 
         className={`SettingsModal-content ${darkMode ? "dark-mode" : "light-mode"}`}
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+        onKeyDown={(e) => e.stopPropagation()}
       >
-        <h2 className="settings-header">Settings</h2>
+        <h2 id="settings-header" className="settings-header">Settings</h2>
   
         {/* Model Selection - Styled as a Green Bubble */}
         <div className="model-selector-container">
@@ -85,6 +102,16 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
       </div>
     </div>
   );
-}
+};
+
+// PropTypes validation
+SettingsModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  darkMode: PropTypes.bool.isRequired,
+  setDarkMode: PropTypes.func.isRequired,
+  apiBaseUrl: PropTypes.string.isRequired,
+  model: PropTypes.string.isRequired,
+  setModel: PropTypes.func.isRequired
+};
 
 export default SettingsModal;

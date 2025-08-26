@@ -5,6 +5,7 @@
 
 // Required imports
 import React from 'react';
+import PropTypes from 'prop-types';
 import './InfoModal.css';
 
 // Display the information modal
@@ -15,11 +16,26 @@ const InfoModal = ({ onClose, darkMode }) => {
     }
   };
 
+  // Handle keyboard events for accessibility
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      onClose();
+    }
+  };
+
   // Return the JSX for the component
   return (
-    <div className="InfoModal" onClick={handleClickOutside}>
+    <div 
+      className="InfoModal" 
+      onClick={handleClickOutside}
+      onKeyDown={handleKeyDown}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="info-header"
+      tabIndex={-1}
+    >
       <div className={`InfoModal-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-        <h2><strong>Information</strong></h2>
+        <h2 id="info-header"><strong>Information</strong></h2>
         <p>Welcome to SUSTAIN Chat!</p>
         <p><strong>How to use:</strong></p>
         <ul>
@@ -37,6 +53,12 @@ const InfoModal = ({ onClose, darkMode }) => {
       </div>
     </div>
   );
+};
+
+// PropTypes validation
+InfoModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  darkMode: PropTypes.bool.isRequired
 };
 
 // Export the component

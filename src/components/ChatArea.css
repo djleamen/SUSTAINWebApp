@@ -20,13 +20,6 @@ Description: This file contains the CSS styles for the ChatArea component.
   background-color: #f8f8f8;
 }
 
-/* Chat bubble formatting */
-.message-container {
-  display: flex;
-  margin-bottom: 15px;
-  padding: 8px 12px;
-}
-
 .user-message, .sustain-message {
   display: inline-block; /* Auto-resize based on text length */
   max-width: 60%; /* Prevent bubbles from being too wide */
@@ -68,6 +61,7 @@ Description: This file contains the CSS styles for the ChatArea component.
   justify-content: flex-start;
   width: 100%;
   margin-bottom: 10px;
+  padding: 8px 12px;
 }
 
 .message-container.user {

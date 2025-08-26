@@ -7,7 +7,6 @@ import InfoModal from './components/InfoModal';
 import SettingsModal from './components/SettingsModal';
 import { log, logError } from './utils/logger';
 import MathOptimizer from './utils/MathOptimizer';
-import axios from 'axios';
 
 const App = () => {
   const [messages, setMessages] = useState([]);
@@ -19,7 +18,6 @@ const App = () => {
   const [co2Savings, setCo2Savings] = useState(null);
   const [loadingCo2, setLoadingCo2] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo');
-  const [previousModel, setPreviousModel] = useState('gpt-3.5-turbo');
   const [isMobile, setIsMobile] = useState(false);
   const API_BASE_URL = 'https://sustain-backend.azurewebsites.net';
 
@@ -91,6 +89,10 @@ const App = () => {
       // Ensure valid response format
       if (!responseText || typeof percentageSaved !== "number") {
         console.error("Unexpected API response format:", data);
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { sender: 'SUSTAIN', text: 'Sorry, I encountered an error processing your request.', percentageSaved: 0 }
+        ]);
         return;
       }
   
@@ -108,6 +110,12 @@ const App = () => {
     } catch (error) {
       logError(error);
       console.error('Error sending message:', error);
+      
+      // Show user-friendly error message
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { sender: 'SUSTAIN', text: 'Sorry, I encountered an error. Please try again.', percentageSaved: 0 }
+      ]);
     }
   };
 
@@ -136,7 +144,6 @@ const App = () => {
       ...prevMessages,
       { sender: 'System', text: `Now using ${newModel}`, system: true }
     ]);
-    setPreviousModel(newModel);
   };
 
   // Calculate Average Savings

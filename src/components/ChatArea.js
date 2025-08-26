@@ -4,6 +4,7 @@
 
 // Required imports
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './ChatArea.css';
 
 // Display the chat messages
@@ -18,7 +19,7 @@ const ChatArea = ({ messages }) => {
   return (
     <div className="ChatArea">
       {messages.map((msg, index) => (
-        <div key={index} className={`message-container ${msg.sender === 'You' ? 'user' : 'sustain'}`}>
+        <div key={`msg-${index}`} className={`message-container ${msg.sender === 'You' ? 'user' : 'sustain'}`}>
           {msg.system ? (
             <div className="system-message">{msg.text}</div>
           ) : (
@@ -39,6 +40,16 @@ const ChatArea = ({ messages }) => {
       <div ref={chatEndRef} />
     </div>
   );
+};
+
+// PropTypes validation
+ChatArea.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.shape({
+    sender: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    percentageSaved: PropTypes.number,
+    system: PropTypes.bool
+  })).isRequired
 };
 
 // Export the component

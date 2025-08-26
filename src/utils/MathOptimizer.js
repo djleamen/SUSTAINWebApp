@@ -36,7 +36,7 @@ class MathOptimizer {
     }
   
     recognizeMath(userInput) {
-      const mathPattern = /(\d+|\w+)\s*(\+|\-|\*|\/|\bplus\b|\bminus\b|\btimes\b|\bdivided\b|\bto\s+the\s+power\s+of\b|\^)\s*(\d+|\w+)/i;
+      const mathPattern = /(\d+|\w+)\s*(\+|-|\*|\/|\bplus\b|\bminus\b|\btimes\b|\bdivided\b|\bto\s+the\s+power\s+of\b|\^)\s*(\d+|\w+)/i;
       return mathPattern.test(userInput);
     }
   
@@ -65,17 +65,44 @@ class MathOptimizer {
       userInput = this.convertWordsToNumbers(userInput);
       userInput = this.convertOps(userInput);
   
-      console.log(`Sanitized input: ${userInput}`); // Debugging line
+      // Debugging line - remove in production
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Sanitized input: ${userInput}`);
+      }
   
       try {
-        if (/^[\d+\-*/(). ]+$/.test(userInput)) {
-          const result = eval(userInput);
-          return result;
-        } else {
-          return "Error: Invalid math expression";
-        }
+        // Safer alternative to eval() for basic math operations
+        const result = this.safeMathEval(userInput);
+        return result;
       } catch (error) {
         return `Error: ${error.message}`;
+      }
+    }
+
+    safeMathEval(expression) {
+      // Remove all spaces and validate the expression contains only allowed characters
+      const cleanExpression = expression.replace(/\s/g, '');
+      
+      // Only allow numbers, basic operators, parentheses, and decimal points
+      if (!/^[\d+\-*/().]+$/.test(cleanExpression)) {
+        throw new Error("Invalid characters in expression");
+      }
+
+      // Parse and evaluate the expression safely
+      try {
+        // Use Function constructor instead of eval for better security
+        const func = new Function('return (' + cleanExpression + ')');
+        const result = func();
+        
+        // Validate the result is a finite number
+        if (!Number.isFinite(result)) {
+          throw new Error("Result is not a valid number");
+        }
+        
+        return result;
+      } catch (evaluationError) {
+        // Re-throw with a more specific error message
+        throw new Error(`Invalid mathematical expression: ${evaluationError.message}`);
       }
     }
   }

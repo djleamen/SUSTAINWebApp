@@ -1,41 +1,42 @@
 {
-    "name": "sustain-chat",
-    "version": "1.0.0",
-    "description": "SUSTAIN Chat Application",
-    "main": "index.js",
-    "scripts": {
-      "start": "serve -s build",
-      "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
-      "test": "react-scripts test",
-      "dev": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start"
-    },
-    "dependencies": {
-      "axios": "^1.8.1",
-      "cors": "^2.8.5",
-      "cross-env": "^7.0.3",
-      "dotenv": "^10.0.0",
-      "openai": "^4.85.1",
-      "react": "^17.0.2",
-      "react-dom": "^17.0.2",
-      "react-scripts": "4.0.3",
-      "serve": "^14.2.4"
-    },
-    "devDependencies": {
-      "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
-      "cross-env": "^7.0.3",
-      "eslint": "^7.32.0",
-      "eslint-plugin-react": "^7.24.0"
-    },
-    "browserslist": {
-      "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
-      ],
-      "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
-      ]
-    }
+  "name": "sustain-chat",
+  "version": "1.0.0",
+  "description": "SUSTAIN Chat Application",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve -s build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "test": "react-scripts test",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start"
+  },
+  "dependencies": {
+    "axios": "^0.28.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "openai": "^4.85.1",
+    "prop-types": "^15.8.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "5.0.1",
+    "serve": "^14.2.4"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.24.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
+}

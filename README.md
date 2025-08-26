@@ -1,13 +1,5 @@
 # 🌱 SUSTAIN: The Environmentally-Friendly AI 🌱
 
-![Status](https://img.shields.io/badge/Status-Offline-red)
-![Backend](https://img.shields.io/badge/Backend-Express.js-orange)
-![Frontend](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)
-![Hosting](https://img.shields.io/badge/Hosting-Azure-0078D4?logo=microsoftazure)
-![API](https://img.shields.io/badge/API-OpenAI-informational)
-![License](https://img.shields.io/badge/license-MIT--0-lightgrey)
-![Last Commit](https://img.shields.io/github/last-commit/djleamen/SUSTAIN)
-
 <picture>
   <source srcset="SUSTAINOriginalWhiteTransparentCropped.png" media="(prefers-color-scheme: dark)">
   <img src="SUSTAINOriginalBlackTransparentCropped.png" alt="SUSTAIN logo">
@@ -68,10 +60,9 @@ SUSTAIN is a powerful, straight-to-the-point professional AI assistant.
 - [x] Provide additional eco-feedback on overall token savings
 - [x] Enhance the GUI with more user-friendly features and customization options
 - [x] Convert to web app and deploy on Azure
-- [x] Implement math optimization pipeline
-- [x] Convert to Android, iOS apps
 - [ ] Implement caching for frequently requested queries to reduce API calls
-
+- [ ] Implement math optimization pipeline
+- [ ] Convert to Android, iOS apps
 
 ---
 

@@ -5,6 +5,7 @@ simple input field and a button to send the message.
 
 // Required imports
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import './InputArea.css';
 
 const InputArea = ({ onSendMessage }) => {
@@ -33,6 +34,11 @@ const InputArea = ({ onSendMessage }) => {
       <button type="submit">Send</button>
     </form>
   );
+};
+
+// PropTypes validation
+InputArea.propTypes = {
+  onSendMessage: PropTypes.func.isRequired
 };
 
 export default InputArea;

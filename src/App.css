@@ -147,6 +147,7 @@ html, body {
 .InputArea {
   width: 80vw;
   max-width: 900px;
+  position: -webkit-sticky;
   position: sticky;
   bottom: 0;
   background: white;
