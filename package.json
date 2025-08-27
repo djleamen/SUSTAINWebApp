@@ -17,7 +17,7 @@
     "openai": "^4.85.1",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react-dom": "^19.1.1",
     "react-scripts": "5.0.1",
     "serve": "^14.2.4"
   },
