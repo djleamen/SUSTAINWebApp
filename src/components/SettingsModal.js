@@ -55,11 +55,10 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
   };
 
   return (
-    <div 
+    <dialog 
       className="SettingsModal" 
       onClick={onClose}
       onKeyDown={(e) => handleKeyDown(e, onClose)}
-      role="dialog"
       aria-modal="true"
       aria-labelledby="settings-header"
     >
@@ -100,7 +99,7 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
           </p>
         )}
       </div>
-    </div>
+    </dialog>
   );
 };
 

@@ -25,11 +25,10 @@ const InfoModal = ({ onClose, darkMode }) => {
 
   // Return the JSX for the component
   return (
-    <div 
+    <dialog 
       className="InfoModal" 
       onClick={handleClickOutside}
       onKeyDown={handleKeyDown}
-      role="dialog"
       aria-modal="true"
       aria-labelledby="info-header"
       tabIndex={-1}
@@ -51,7 +50,7 @@ const InfoModal = ({ onClose, darkMode }) => {
         <p><strong>What we cut out and why:</strong></p>
         <p>We remove unnecessary words and phrases to optimize the text and reduce the number of tokens used. This helps in reducing compute costs and environmental impact.</p>
       </div>
-    </div>
+    </dialog>
   );
 };
 
