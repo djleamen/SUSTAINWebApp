@@ -10,7 +10,7 @@
     "dev": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start"
   },
   "dependencies": {
-    "axios": "^1.12.2",
+    "axios": "^1.13.0",
     "cors": "^2.8.5",
     "cross-env": "^10.1.0",
     "dotenv": "^17.2.3",
