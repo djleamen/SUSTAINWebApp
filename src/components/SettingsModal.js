@@ -59,7 +59,7 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
       className="SettingsModal" 
       onClick={onClose}
       onKeyDown={(e) => handleKeyDown(e, onClose)}
-      aria-modal="true"
+      open
       aria-labelledby="settings-header"
     >
       <div 

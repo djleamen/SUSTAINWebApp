@@ -29,9 +29,8 @@ const InfoModal = ({ onClose, darkMode }) => {
       className="InfoModal" 
       onClick={handleClickOutside}
       onKeyDown={handleKeyDown}
-      aria-modal="true"
+      open
       aria-labelledby="info-header"
-      tabIndex={-1}
     >
       <div className={`InfoModal-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
         <h2 id="info-header"><strong>Information</strong></h2>

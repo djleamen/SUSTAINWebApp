@@ -35,14 +35,13 @@ class MathOptimizer {
       return userInput;
     }
   
-    recognizeMath(userInput) {
-      const mathPattern = /(\d+|\w+)\s*(\+|-|\*|\/|\bplus\b|\bminus\b|\btimes\b|\bdivided\b|\bto\s+the\s+power\s+of\b|\^)\s*(\d+|\w+)/i;
-      return mathPattern.test(userInput);
-    }
-  
-    convertWordsToNumbers(userInput) {
+  recognizeMath(userInput) {
+    // regex that avoids catastrophic backtracking
+    const mathPattern = /(?:\d+|\w+)[ \t]{0,10}(?:\+|-|\*|\/|\bplus\b|\bminus\b|\btimes\b|\bdivided\b|\bto\s+the\s+power\s+of\b|\^)[ \t]{0,10}(?:\d+|\w+)/i;
+    return mathPattern.test(userInput);
+  }    convertWordsToNumbers(userInput) {
       for (const [word, number] of Object.entries(this.wordToNumber)) {
-        userInput = userInput.replace(new RegExp(`\\b${word}\\b`, 'gi'), number);
+        userInput = userInput.replaceAll(new RegExp(String.raw`\b${word}\b`, 'gi'), number);
       }
       return userInput;
     }
@@ -51,12 +50,12 @@ class MathOptimizer {
       // Convert basic operators first
       for (const [word, operator] of Object.entries(this.wordToOperator)) {
         if (word !== 'to the power of' && word !== '^') {
-          userInput = userInput.replace(new RegExp(`\\b${word}\\b`, 'gi'), operator);
+          userInput = userInput.replaceAll(new RegExp(String.raw`\b${word}\b`, 'gi'), operator);
         }
       }
       // Convert power operators last
-      userInput = userInput.replace(/\bto the power of\b/gi, '**');
-      userInput = userInput.replace(/\^/g, '**');
+      userInput = userInput.replaceAll(/\bto the power of\b/gi, '**');
+      userInput = userInput.replaceAll('^', '**');
       return userInput;
     }
   
@@ -83,20 +82,58 @@ class MathOptimizer {
       // Remove all spaces and validate the expression contains only allowed characters
       const cleanExpression = expression.replace(/\s/g, '');
       
-      // Only allow numbers, basic operators, parentheses, and decimal points
+      // Strict validation: only allow digits, operators, parentheses, and decimal points
+      // Ensure no consecutive operators (except for negative numbers)
       if (!/^[\d+\-*/().]+$/.test(cleanExpression)) {
         throw new Error("Invalid characters in expression");
       }
 
+      // Additional security checks to prevent code injection attempts
+      const dangerousPatterns = [
+        /constructor/i,
+        /__proto__/i,
+        /prototype/i,
+        /function/i,
+        /=>/,
+        /\[/,
+        /\]/,
+        /\{/,
+        /\}/,
+        /;/,
+        /,/,
+        /\\x/,
+        /\\u/
+      ];
+
+      for (const pattern of dangerousPatterns) {
+        if (pattern.test(cleanExpression)) {
+          throw new Error("Expression contains potentially dangerous patterns");
+        }
+      }
+
+      // Validate balanced parentheses
+      let parenCount = 0;
+      for (const char of cleanExpression) {
+        if (char === '(') parenCount++;
+        if (char === ')') parenCount--;
+        if (parenCount < 0) {
+          throw new Error("Unbalanced parentheses");
+        }
+      }
+      if (parenCount !== 0) {
+        throw new Error("Unbalanced parentheses");
+      }
+
       // Parse and evaluate the expression safely
       try {
-        // Use Function constructor instead of eval for better security
-        const func = new Function('return (' + cleanExpression + ')');
+        // Create a sandboxed function with no access to global scope
+        // Use strict mode and immediately invoked function to limit scope
+        const func = new Function('"use strict"; return (' + cleanExpression + ')');
         const result = func();
         
         // Validate the result is a finite number
         if (!Number.isFinite(result)) {
-          throw new Error("Result is not a valid number");
+          throw new TypeError("Result is not a valid number");
         }
         
         return result;

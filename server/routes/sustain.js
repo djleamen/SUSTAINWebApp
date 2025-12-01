@@ -6,8 +6,8 @@ The response is then returned to the user along with the percentage of tokens sa
 
 // Required modules
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const router = express.Router();
 const OpenAI = require('openai');
 require('dotenv').config();
@@ -23,13 +23,13 @@ let phrasesToRemove = [];
 
 // Read stopwords from file at startup
 fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
-  if (!err) {
+  if (err) {
+    console.error("Failed to read phrases_to_remove.txt:", err);
+  } else {
     phrasesToRemove = data
       .split('\n')
       .map(line => line.trim()) // Trim whitespace
       .filter(line => line.length > 0); // Remove empty lines
-  } else {
-    console.error("Failed to read phrases_to_remove.txt:", err);
   }
 });
 
@@ -41,7 +41,7 @@ const CO2_PER_KWH = 0.4; // kg CO₂ per kWh
 let totalTokensSaved = 0;
 
 // Function to escape special characters in a string for regex
-const escapeRegex = (phrase) => phrase.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+const escapeRegex = (phrase) => phrase.replaceAll(/[-/\\^$*+?.()|[\]{}]/g, String.raw`\$&`);
 
 // Function to apply contractions and replacements
 const applyContractions = (text) => {
@@ -88,9 +88,9 @@ const isMathOptimization = (input) => {
   const mathRegex = /^(\d+)\s*([+\-*/])\s*(\d+)$/;
   const match = input.match(mathRegex);
   if (match) {
-    const num1 = parseFloat(match[1]);
+    const num1 = Number.parseFloat(match[1]);
     const operator = match[2];
-    const num2 = parseFloat(match[3]);
+    const num2 = Number.parseFloat(match[3]);
     let result;
 
     switch (operator) {

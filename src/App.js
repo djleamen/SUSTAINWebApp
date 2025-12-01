@@ -186,7 +186,7 @@ const App = () => {
         <SettingsModal
           onClose={() => setShowSettings(false)}
           darkMode={darkMode}
-          setDarkMode={setDarkMode}
+          toggleDarkMode={toggleDarkMode}
           fetchCo2Savings={fetchCo2Savings}
           co2Savings={co2Savings}
           loadingCo2={loadingCo2}

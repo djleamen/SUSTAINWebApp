@@ -19,7 +19,7 @@ const ChatArea = ({ messages }) => {
   return (
     <div className="ChatArea">
       {messages.map((msg, index) => (
-        <div key={`msg-${index}`} className={`message-container ${msg.sender === 'You' ? 'user' : 'sustain'}`}>
+        <div key={`${msg.sender}-${msg.text.slice(0, 20)}-${index}`} className={`message-container ${msg.sender === 'You' ? 'user' : 'sustain'}`}>
           {msg.system ? (
             <div className="system-message">{msg.text}</div>
           ) : (
@@ -28,7 +28,7 @@ const ChatArea = ({ messages }) => {
                 <strong>{msg.sender}: </strong>{msg.text}
               </div>
               {/** Display the token savings if the sender is 'SUSTAIN' and the percentageSaved is a number */}
-              {msg.sender === 'SUSTAIN' && typeof msg.percentageSaved === 'number' && !isNaN(msg.percentageSaved) && (
+              {msg.sender === 'SUSTAIN' && typeof msg.percentageSaved === 'number' && !Number.isNaN(msg.percentageSaved) && (
                 <div className="savings-text">
                   Token savings: {msg.percentageSaved}%
                 </div>
