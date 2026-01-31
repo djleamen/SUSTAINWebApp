@@ -1,4 +1,14 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * Main Application Component for SUSTAIN Web App
+ * 
+ * This component manages the overall state and layout of the SUSTAIN web application,
+ * including chat interactions, settings, and CO₂ savings display.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
+
+import { useState, useEffect } from 'react';
 import './App.css';
 import ChatArea from './components/ChatArea';
 import InputArea from './components/InputArea';
@@ -9,6 +19,11 @@ import { log, logError } from './utils/logger';
 import MathOptimizer from './utils/MathOptimizer';
 
 const App = () => {
+  /**
+   * Main App component for SUSTAIN Web Application.
+   * 
+   * @returns {JSX.Element} The rendered App component.
+   */
   const [messages, setMessages] = useState([]);
   const [totalPercentageSaved, setTotalPercentageSaved] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
@@ -17,20 +32,29 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [co2Savings, setCo2Savings] = useState(null);
   const [loadingCo2, setLoadingCo2] = useState(false);
-  const [model, setModel] = useState('gpt-3.5-turbo');
+  const [model, setModel] = useState('gpt-3.5-turbo'); // should update model default here... is 3.5-turbo still available?
   const [isMobile, setIsMobile] = useState(false);
-  const API_BASE_URL = 'https://sustain-backend.azurewebsites.net';
+  const API_BASE_URL = 'https://sustain-backend.azurewebsites.net'; // deprecated: this endpoint does not exist anymore
 
   const mathOptimizer = new MathOptimizer(); 
 
-  // Load Dark Mode Preference from Local Storage
   useEffect(() => {
+    /**
+     * Restores dark mode setting from local storage on component mount.
+     * 
+     * @param {Function} setDarkMode - Function to set dark mode state.
+     */
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
     log(`Dark mode loaded: ${savedDarkMode}`);
   }, []);
 
   useEffect(() => {
+    /**
+     * Checks if the device is mobile based on window width.
+     * 
+     * @param {Function} setIsMobile - Function to set mobile state.
+     */
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -43,8 +67,12 @@ const App = () => {
     };
   }, []);
 
-  // Toggle Dark Mode & Save Preference
   const toggleDarkMode = () => {
+    /**
+     * Toggles dark mode state and saves preference to local storage.
+     * 
+     * @param {Function} setDarkMode - Function to set dark mode state.
+     */
     setDarkMode(prevMode => {
       const newMode = !prevMode;
       localStorage.setItem("darkMode", newMode);
@@ -52,8 +80,12 @@ const App = () => {
     });
   };
 
-  // Handle Sending Messages to SUSTAIN API
   const handleSendMessage = async (userInput) => {
+    /**
+     * Handles sending user messages to the SUSTAIN API and updating chat state.
+     * 
+     * @param {string} userInput - The user's input message.
+     */
     log(`User sent message: ${userInput}`);
   
     // Optimistically update UI
@@ -86,7 +118,6 @@ const App = () => {
       const data = await response.json();
       const { responseText, percentageSaved } = data;
   
-      // Ensure valid response format
       if (!responseText || typeof percentageSaved !== "number") {
         console.error("Unexpected API response format:", data);
         setMessages(prevMessages => [
@@ -96,13 +127,24 @@ const App = () => {
         return;
       }
   
-      // Update Chat UI
       setMessages(prevMessages => [
+        /**
+         * Renders the SUSTAIN response message.
+         * 
+         * @param {Array} prevMessages - The previous array of messages.
+         * @returns {Array} The updated array of messages including the new SUSTAIN response.
+         */
         ...prevMessages,
         { sender: 'SUSTAIN', text: responseText, percentageSaved }
       ]);
   
-      // Update Token Savings
+      /**
+       * Updates the total token savings and message count.
+       * 
+       * @param {Function} setTotalPercentageSaved - Function to update total token savings.
+       * @param {Function} setMessageCount - Function to update message count.
+       */
+      
       setTotalPercentageSaved(prevTotal => prevTotal + percentageSaved);
       setMessageCount(prevCount => prevCount + 1);
   
@@ -111,8 +153,13 @@ const App = () => {
       logError(error);
       console.error('Error sending message:', error);
       
-      // Show user-friendly error message
       setMessages(prevMessages => [
+        /**
+         * Renders an error message from SUSTAIN.
+         * 
+         * @param {Array} prevMessages - The previous array of messages.
+         * @returns {Array} The updated array of messages including the error message.
+         */
         ...prevMessages,
         { sender: 'SUSTAIN', text: 'Sorry, I encountered an error. Please try again.', percentageSaved: 0 }
       ]);
@@ -137,8 +184,12 @@ const App = () => {
     }
   };
 
-  // Handle Model Change
   const handleModelChange = (newModel) => {
+    /**
+     * Handles changes to the selected AI model.
+     * 
+     * @param {string} newModel - The newly selected AI model.
+     */
     setModel(newModel);
     setMessages(prevMessages => [
       ...prevMessages,
@@ -146,7 +197,11 @@ const App = () => {
     ]);
   };
 
-  // Calculate Average Savings
+  /**
+   * Calculates the average token savings per message.
+   * 
+   * @type {string|number} averageSavings - The average token savings as a percentage, formatted to two decimal places.
+   */
   const averageSavings = messageCount > 0 ? (totalPercentageSaved / messageCount).toFixed(2) : 0;
 
   if (isMobile) {

@@ -1,9 +1,9 @@
-/*
-Description: Styles for the SettingsModal component
+/**
+ * SettingsModal.css
+ * Styles for the SettingsModal component, including dark and light mode support,
+ * layout, and button styles for toggling dark mode and calculating CO₂ savings.
 */
 
-/* Modal background (closes on outside click) */
-/* Modal Background */
 .SettingsModal {
   position: fixed;
   top: 0;
@@ -16,7 +16,6 @@ Description: Styles for the SettingsModal component
   align-items: center;
 }
 
-/* Modal Content */
 .SettingsModal-content {
   background: white;
   padding: 30px;
@@ -28,19 +27,16 @@ Description: Styles for the SettingsModal component
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Dark Mode */
 .SettingsModal-content.dark-mode {
   background: #222;
   color: white;
 }
 
-/* Light Mode */
 .SettingsModal-content.light-mode {
   background: white;
   color: black;
 }
 
-/* Settings Header */
 .settings-header {
   font-size: 26px;
   font-weight: bold;
@@ -48,7 +44,6 @@ Description: Styles for the SettingsModal component
   margin-bottom: 25px;
 }
 
-/* Buttons Styling */
 .dark-mode-toggle, .calculate-co2-button {
   width: 366px;
   padding: 14px;
@@ -62,7 +57,6 @@ Description: Styles for the SettingsModal component
   margin-bottom: 18px;
 }
 
-/* Dark Mode Button */
 .dark-mode-toggle {
   background-color: #4CAD75;
   color: white;
@@ -94,14 +88,12 @@ Description: Styles for the SettingsModal component
   font-style: italic;
 }
 
-/* Dark Mode Styles for Text */
 .dark-mode .co2-text {
   color: #ddd;
 }
 
-/* Model Selector Styled as a Bubble */
 .model-selector-container {
-  background-color: #4CAD75;  /* Green like other buttons */
+  background-color: #4CAD75;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -112,7 +104,7 @@ Description: Styles for the SettingsModal component
   font-weight: bold;
   width: 100%;
   max-width: 320px; /* Matches button widths */
-  margin: 0 auto 20px auto; /* Centering */
+  margin: 0 auto 20px auto;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 

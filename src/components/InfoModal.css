@@ -1,8 +1,9 @@
-/*
-Description: Styles for the InfoModal component
+/**
+ * InfoModal.css
+ * Styles for the InfoModal component, including dark and light mode support,
+ * layout, and button styles for closing the modal.
 */
 
-/* InfoModal component styles */
 .InfoModal {
   position: fixed;
   top: 0;

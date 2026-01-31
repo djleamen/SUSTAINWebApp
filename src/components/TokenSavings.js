@@ -1,14 +1,23 @@
-/*
-Description: This component displays the average token savings percentage.
-*/
+/**
+ * TokenSavings Component
+ * 
+ * This component displays the average token savings achieved by users,
+ * encouraging environmentally friendly usage of AI services.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
 
-// Required imports
-import React from 'react';
 import PropTypes from 'prop-types';
 import './TokenSavings.css';
 
-// Display the average token savings
 const TokenSavings = ({ averageSavings }) => {
+  /**
+   * TokenSavings component to display average token savings.
+   * 
+   * @param {string|number} averageSavings - The average token savings percentage.
+   * @returns {JSX.Element} The rendered TokenSavings component.
+   */
   return (
     <div className="TokenSavings" style={{ fontFamily: 'Lexend, sans-serif', fontWeight: 'normal' }}>
       Average token savings: {averageSavings}%. Thank you for going green!

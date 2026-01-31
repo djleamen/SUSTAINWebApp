@@ -1,5 +1,7 @@
-/*
-Description: Styles for the InputArea component
+/**
+ * InputArea.css
+ * Styles for the InputArea component, including layout and button styles
+ * for sending messages. Supports light and dark modes.
 */
 
 .InputArea {

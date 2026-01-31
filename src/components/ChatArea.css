@@ -1,5 +1,8 @@
-/*
-Description: This file contains the CSS styles for the ChatArea component.
+/**
+ * ChatArea.css
+ * 
+ * Styles for the ChatArea component, including user and sustain message bubbles,
+ * system messages, and overall layout.
 */
 
 /* ChatArea component styles */

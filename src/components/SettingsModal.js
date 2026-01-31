@@ -1,25 +1,43 @@
-/*
-Description: This component is a modal that displays the settings of the app. 
-It has buttons for toggling dark mode and calculating CO₂ savings.
-*/
+/**
+ * SettingsModal Component
+ * 
+ * This component provides a modal dialog for users to adjust application settings,
+ * including toggling dark mode, selecting AI models, and calculating CO₂ savings.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
 
-// Required imports
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './SettingsModal.css';
 
 const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setModel }) => {
+  /**
+   * SettingsModal component to adjust app settings.
+   * 
+   * @param {Function} onClose - Function to call when the modal is closed.
+   * @param {boolean} darkMode - Flag indicating if dark mode is enabled.
+   * @param {Function} setDarkMode - Function to toggle dark mode.
+   * @param {string} apiBaseUrl - Base URL for the API.
+   * @param {string} model - Currently selected AI model.
+   * @param {Function} setModel - Function to set the selected AI model.
+   * @returns {JSX.Element} The rendered SettingsModal component.
+   */
   const [co2Savings, setCo2Savings] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Toggle Dark Mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     localStorage.setItem("darkMode", !darkMode);
   };
 
-  // Restore dark mode from local storage
   useEffect(() => {
+    /**
+     * Restores dark mode setting from local storage on component mount.
+     * 
+     * @param {Function} setDarkMode - Function to set dark mode state.
+     */
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
   }, [setDarkMode]);
@@ -40,14 +58,23 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
     }
   };
 
-  // Handle Model Change
   const handleModelChange = (e) => {
+    /**
+     * Handles changes to the selected AI model.
+     * 
+     * @param {Object} e - The event object from the select input.
+     */
     const newModel = e.target.value;
     setModel(newModel);
   };
 
-  // Handle keyboard events for accessibility
   const handleKeyDown = (event, callback) => {
+    /**
+     * Handles keyboard events for accessibility, triggering callback on Enter or Space key.
+     * 
+     * @param {Object} event - The keyboard event object.
+     * @param {Function} callback - The function to call when the key is pressed.
+     */
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       callback();

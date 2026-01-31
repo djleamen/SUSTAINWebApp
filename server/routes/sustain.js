@@ -1,10 +1,16 @@
-/*
-Description: This file contains the Express.js route for the SUSTAIN API. 
-It receives user input, optimizes it, and sends it to the OpenAI API for completion. 
-The response is then returned to the user along with the percentage of tokens saved.
-*/
+/**
+ * sustain.js
+ * 
+ * This module defines the /sustain route for the SUSTAIN web application.
+ * It handles user input optimization to reduce token usage and CO₂ emissions.
+ * The route processes POST requests with user input, applies text optimizations,
+ * interacts with the OpenAI API, and returns optimized responses along with
+ * statistics on token savings and environmental impact.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
 
-// Required modules
 const express = require('express');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -12,7 +18,6 @@ const router = express.Router();
 const OpenAI = require('openai');
 require('dotenv').config();
 
-// Initialize OpenAI API
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -21,8 +26,13 @@ const openai = new OpenAI({
 const phrasesFilePath = path.join(__dirname, '../phrases_to_remove.txt');
 let phrasesToRemove = [];
 
-// Read stopwords from file at startup
 fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
+  /**
+   * Reads phrases from phrases_to_remove.txt and stores them in an array.
+   * 
+   * @param {Error} err - Error object if reading fails.
+   * @param {string} data - File content as a string.
+   */
   if (err) {
     console.error("Failed to read phrases_to_remove.txt:", err);
   } else {
@@ -33,7 +43,7 @@ fs.readFile(phrasesFilePath, 'utf8', (err, data) => {
   }
 });
 
-// Constants for CO₂ calculation (Matches Python version)
+// Constants for CO₂ calculation
 const ENERGY_PER_TOKEN = 0.000002; // kWh per token
 const CO2_PER_KWH = 0.4; // kg CO₂ per kWh
 
@@ -43,8 +53,13 @@ let totalTokensSaved = 0;
 // Function to escape special characters in a string for regex
 const escapeRegex = (phrase) => phrase.replaceAll(/[-/\\^$*+?.()|[\]{}]/g, String.raw`\$&`);
 
-// Function to apply contractions and replacements
 const applyContractions = (text) => {
+  /**
+   * Applies common English contractions to the input text to reduce token count.
+   * 
+   * @param {string} text - The input text to apply contractions to.
+   * @returns {string} - The text with contractions applied.
+   */
   const contractions = {
     "I am": "I'm",
     "can not": "can't",
@@ -85,6 +100,12 @@ const applyContractions = (text) => {
 };
 
 const isMathOptimization = (input) => {
+  /**
+   * Checks if the input is a simple math expression and computes the result.
+   * 
+   * @param {string} input - The user input to check.
+   * @returns {number|null} - The computed result or null if not a math expression.
+   */
   const mathRegex = /^(\d+)\s*([+\-*/])\s*(\d+)$/;
   const match = input.match(mathRegex);
   if (match) {
@@ -121,8 +142,14 @@ const MODEL_ENERGY_CONSUMPTION = {
   'gpt-4o': 0.000003,
 };
 
-// Route to handle POST requests
 router.post('/', async (req, res) => {
+  /**
+   * POST /sustain
+   * Receives user input, optimizes it, and returns the optimized response along with token savings.
+   * 
+   * @param {Object} req - Express request object.
+   * @param {Object} res - Express response object.
+   */
   try {
     const { userInput, model } = req.body;
 
@@ -135,7 +162,7 @@ router.post('/', async (req, res) => {
     }
 
     // Sanitize input to prevent injection attacks
-    const sanitizedInput = userInput.trim().substring(0, 1000); // Limit input length
+    const sanitizedInput = userInput.trim().substring(0, 1000);
 
     // Validate model if provided
     const allowedModels = ['gpt-3.5-turbo', 'gpt-4o'];
@@ -236,14 +263,25 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Route to handle GET requests
 router.get('/', (req, res) => {
+  /**
+   * GET /sustain
+   * Simple route to check if the SUSTAIN API is running.
+   * 
+   * @param {Object} req - Express request object.
+   * @param {Object} res - Express response object.
+   */
   res.json({ message: "SUSTAIN API is running!" });
 });
 
-// Route to calculate CO₂ savings
 router.get('/co2-savings', (req, res) => {
-  // Prevent displaying CO₂ savings if no tokens were saved
+  /**
+   * GET /sustain/co2-savings
+   * Returns the total CO₂ savings based on accumulated token savings.
+   * 
+   * @param {Object} req - Express request object.
+   * @param {Object} res - Express response object.
+   */
   if (totalTokensSaved === 0) {
     return res.json({ totalKwhSaved: 0, totalCo2Saved: 0 });
   }

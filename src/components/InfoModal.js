@@ -1,23 +1,42 @@
-/*
-  Description: This component renders the information modal. 
-  It displays information about the application and how to use it.
-*/
+/**
+ * InfoModal.js
+ * 
+ * This component displays an informational modal dialog for the SUSTAIN web application.
+ * It provides users with instructions on how to use the chat, FAQs, and details about
+ * the ethics policy and text optimizations performed by SUSTAIN.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
 
-// Required imports
-import React from 'react';
 import PropTypes from 'prop-types';
 import './InfoModal.css';
 
-// Display the information modal
 const InfoModal = ({ onClose, darkMode }) => {
+  /**
+   * InfoModal component to display information about the SUSTAIN app.
+   * 
+   * @param {Function} onClose - Function to call when the modal is closed.
+   * @param {boolean} darkMode - Flag indicating if dark mode is enabled.
+   * @returns {JSX.Element} The rendered InfoModal component.
+   */
   const handleClickOutside = (e) => {
+    /**
+     * Handles clicks outside the modal content to close the modal.
+     * 
+     * @param {Object} e - The click event object.
+     */
     if (e.target.className === 'InfoModal') {
       onClose();
     }
   };
 
-  // Handle keyboard events for accessibility
   const handleKeyDown = (event) => {
+    /**
+     * Handles keydown events to close the modal on Escape key press.
+     * 
+     * @param {Object} event - The keyboard event object.
+     */
     if (event.key === 'Escape') {
       onClose();
     }

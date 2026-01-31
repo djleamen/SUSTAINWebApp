@@ -1,21 +1,23 @@
-/*
-Description: This is the main entry point of the application. 
-It renders the App component to the root element in the HTML file.
-*/
+/**
+ * Entry point for the SUSTAIN web application.
+ * 
+ * This file initializes the React application by rendering the main App component
+ * into the root HTML element. It also sets up logging for application start events.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
 
-// Required imports
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './App.css'; // Update the CSS file reference
+import './App.css';
 
-// Import the logger utility
 const { log, logError } = require('./utils/logger');
 
 log('Application has started');
 log('Logging system is operational');
 
-// Render the App component to the root element in the HTML file
 try {
   ReactDOM.render(
     <React.StrictMode>

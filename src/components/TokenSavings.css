@@ -1,6 +1,8 @@
-/* 
-Description: Styles for the TokenSavings component
+/**
+ * Styles for the TokenSavings component.
+ * Displays the token savings information with appropriate styling.
 */
+
 .TokenSavings {
   margin: 20px;
   font-size: 18px;

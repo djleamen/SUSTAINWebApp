@@ -1,3 +1,12 @@
+/**
+ * MathOptimizer Module
+ * Provides functionalities to recognize, parse, and solve mathematical expressions
+ * given in natural language or symbolic form.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
+
 class MathOptimizer {
     constructor() {
       this.wordToOperator = {
@@ -29,6 +38,12 @@ class MathOptimizer {
     }
   
     cleanInput(userInput) {
+      /**
+       * Cleans the user input by removing polite phrases and unwanted characters.
+       * 
+       * @param {string} userInput - The raw user input string.
+       * @returns {string} The cleaned user input string.
+       */
       userInput = userInput.replace(/^(what is|what's|whats|please|can you|please tell me)\s*/i, '');
       userInput = userInput.replace(/[^\w\s+\-*/^()]/g, '');
       userInput = userInput.replace(/\s+/g, ' ').trim();
@@ -36,10 +51,18 @@ class MathOptimizer {
     }
   
   recognizeMath(userInput) {
-    // regex that avoids catastrophic backtracking
+    // Recognizes if the user input contains a mathematical expression
     const mathPattern = /(?:\d+|\w+)[ \t]{0,10}(?:\+|-|\*|\/|\bplus\b|\bminus\b|\btimes\b|\bdivided\b|\bto\s+the\s+power\s+of\b|\^)[ \t]{0,10}(?:\d+|\w+)/i;
     return mathPattern.test(userInput);
-  }    convertWordsToNumbers(userInput) {
+  }
+
+  convertWordsToNumbers(userInput) {
+      /**
+       * Converts word-based numbers in the user input to their numeric equivalents.
+       * 
+       * @param {string} userInput - The user input string with word-based numbers.
+       * @returns {string} The user input string with numeric values.
+       */
       for (const [word, number] of Object.entries(this.wordToNumber)) {
         userInput = userInput.replaceAll(new RegExp(String.raw`\b${word}\b`, 'gi'), number);
       }
@@ -47,7 +70,12 @@ class MathOptimizer {
     }
   
     convertOps(userInput) {
-      // Convert basic operators first
+      /**
+       * Converts word-based operators in the user input to their symbolic equivalents.
+       * 
+       * @param {string} userInput - The user input string with word-based operators.
+       * @returns {string} The user input string with symbolic operators.
+       */
       for (const [word, operator] of Object.entries(this.wordToOperator)) {
         if (word !== 'to the power of' && word !== '^') {
           userInput = userInput.replaceAll(new RegExp(String.raw`\b${word}\b`, 'gi'), operator);
@@ -60,17 +88,17 @@ class MathOptimizer {
     }
   
     solveMath(userInput) {
+      /**
+       * Solves the mathematical expression contained in the user input.
+       * 
+       * @param {string} userInput - The user input string containing a math expression.
+       * @returns {number|string} The result of the computation or an error message.
+       */
       userInput = this.cleanInput(userInput);
       userInput = this.convertWordsToNumbers(userInput);
       userInput = this.convertOps(userInput);
   
-      // Debugging line - remove in production
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`Sanitized input: ${userInput}`);
-      }
-  
       try {
-        // Safer alternative to eval() for basic math operations
         const result = this.safeMathEval(userInput);
         return result;
       } catch (error) {
@@ -79,6 +107,13 @@ class MathOptimizer {
     }
 
     safeMathEval(expression) {
+      /**
+       * Safely evaluates a mathematical expression.
+       * 
+       * @param {string} expression - The mathematical expression to evaluate.
+       * @returns {number} The result of the evaluated expression.
+       * @throws Will throw an error if the expression contains invalid characters or patterns.
+       */
       // Remove all spaces and validate the expression contains only allowed characters
       const cleanExpression = expression.replace(/\s/g, '');
       
@@ -145,3 +180,4 @@ class MathOptimizer {
   }
   
   export default MathOptimizer;
+  

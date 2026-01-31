@@ -1,24 +1,45 @@
-/*
-  Description: This component renders the chat messages. It displays the sender and the message text.
-*/
+/**
+ * ChatArea.js
+ * 
+ * This component displays the chat area where user and SUSTAIN messages are shown.
+ * It handles rendering messages, including system messages and token savings information.
+ * The chat area automatically scrolls to the latest message when new messages are added.
+ * 
+ * Author: SUSTAIN Development Team
+ * Last Modified: Jan 2026
+ */
 
-// Required imports
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './ChatArea.css';
 
-// Display the chat messages
 const ChatArea = ({ messages }) => {
+  /**
+   * ChatArea component to display chat messages.
+   * 
+   * @param {Array} messages - Array of message objects with sender, text, and optional percentageSaved.
+   * @returns {JSX.Element} The rendered chat area component.
+   */
   const chatEndRef = useRef(null);
 
   // Scroll to the bottom whenever messages change
   useEffect(() => {
+    /**
+     * Scrolls the chat area to the latest message.
+     */
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
     <div className="ChatArea">
       {messages.map((msg, index) => (
+        /**
+         * Renders individual chat messages.
+         * 
+         * @param {Object} msg - The message object.
+         * @param {number} index - The index of the message in the array.
+         * @returns {JSX.Element} The rendered message element.
+         */
         <div key={`${msg.sender}-${msg.text.slice(0, 20)}-${index}`} className={`message-container ${msg.sender === 'You' ? 'user' : 'sustain'}`}>
           {msg.system ? (
             <div className="system-message">{msg.text}</div>
@@ -42,7 +63,6 @@ const ChatArea = ({ messages }) => {
   );
 };
 
-// PropTypes validation
 ChatArea.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.shape({
     sender: PropTypes.string.isRequired,
