@@ -50,7 +50,7 @@ const CO2_PER_KWH = 0.4; // kg CO₂ per kWh
 // Cap on response length, configurable via environment.
 // 50 was too tight and truncated replies mid-sentence (SUSTAIN#24).
 const DEFAULT_MAX_RESPONSE_TOKENS = 100;
-const parsedMaxTokens = Number.parseInt(process.env.SUSTAIN_MAX_TOKENS, 10);
+const parsedMaxTokens = Number(process.env.SUSTAIN_MAX_TOKENS);
 const MAX_RESPONSE_TOKENS = Number.isInteger(parsedMaxTokens) && parsedMaxTokens > 0
   ? parsedMaxTokens
   : DEFAULT_MAX_RESPONSE_TOKENS;
