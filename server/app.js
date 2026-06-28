@@ -42,6 +42,25 @@ app.use((req, res, next) => {
 
 app.use('/api/sustain', sustainRoutes);
 
+app.use((err, req, res, next) => {
+  /**
+   * Error-handling middleware that returns JSON instead of an HTML stack
+   * trace for malformed or oversized request bodies.
+   * 
+   * @param {Error} err - Error thrown by upstream middleware (e.g. body parser).
+   * @param {Object} req - Express request object.
+   * @param {Object} res - Express response object.
+   * @param {Function} next - Next middleware function.
+   */
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: "Invalid JSON in request body" });
+  }
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ error: "Request body too large" });
+  }
+  next(err);
+});
+
 app.listen(PORT, () => {
   /**
    * Starts the Express server and listens on the specified port.

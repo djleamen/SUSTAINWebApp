@@ -18,9 +18,15 @@ const router = express.Router();
 const OpenAI = require('openai');
 require('dotenv').config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client only if a key is configured, so the server can
+// still start and serve non-OpenAI routes without one.
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
+
+if (!openai) {
+  console.warn("OPENAI_API_KEY is not set; chat completions will be unavailable.");
+}
 
 // Load phrases to remove from file
 const phrasesFilePath = path.join(__dirname, '../phrases_to_remove.txt');
@@ -215,6 +221,14 @@ router.post('/', async (req, res) => {
 
     // Determine energy consumption per token for the selected model
     const energyPerToken = MODEL_ENERGY_CONSUMPTION[selectedModel] || MODEL_ENERGY_CONSUMPTION['gpt-3.5-turbo'];
+
+    // Fail gracefully if the OpenAI client is not configured
+    if (!openai) {
+      return res.status(503).json({
+        error: "OpenAI API is not configured on this server",
+        percentageSaved: 0
+      });
+    }
 
     // Send only optimized input to OpenAI
     const sustainResponse = await openai.chat.completions.create({
