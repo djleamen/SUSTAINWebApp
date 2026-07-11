@@ -139,6 +139,11 @@ const isMathOptimization = (input) => {
         result = num1 * num2;
         break;
       case '/':
+        // Division by zero would yield Infinity and be reported as a valid
+        // "Math detected!" result; treat it as a normal prompt instead.
+        if (num2 === 0) {
+          return null;
+        }
         result = num1 / num2;
         break;
       default:
