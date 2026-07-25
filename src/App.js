@@ -34,7 +34,11 @@ const App = () => {
   const [loadingCo2, setLoadingCo2] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo'); // should update model default here... is 3.5-turbo still available?
   const [isMobile, setIsMobile] = useState(false);
-  const API_BASE_URL = 'https://sustain-backend.azurewebsites.net'; // deprecated: this endpoint does not exist anymore
+  // The React build and the Express API deploy together as a single Azure Web
+  // App, so the API is same-origin in production (an empty base yields relative
+  // paths). Override with REACT_APP_API_BASE_URL for local development, e.g.
+  // http://localhost:8080 when running the CRA dev server against the backend.
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
   const mathOptimizer = new MathOptimizer(); 
 
