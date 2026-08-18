@@ -6,10 +6,30 @@
  * Last Modified: Jan 2026
  */
 
+// Maximum number of log entries kept in localStorage, so the store can't grow
+// unbounded and eventually throw when it hits the quota.
+const MAX_LOGS = 500;
+
+const readStoredLogs = () => {
+  /**
+   * Safely reads the persisted log array from localStorage.
+   * Returns an empty array if nothing is stored or the value is corrupt.
+   *
+   * @returns {Array} An array of log messages.
+   */
+  try {
+    const stored = JSON.parse(localStorage.getItem('appLogs'));
+    return Array.isArray(stored) ? stored : [];
+  } catch {
+    // Corrupt/non-JSON value in storage - start fresh rather than throwing.
+    return [];
+  }
+};
+
 const log = (message, level = 'INFO') => {
   /**
    * Logs a message with a timestamp and level.
-   * 
+   *
    * @param {string} message - The message to log.
    * @param {string} level - The log level (e.g., INFO, ERROR).
    */
@@ -18,9 +38,16 @@ const log = (message, level = 'INFO') => {
   console.log(logMessage);
 
   // Store logs in localStorage for persistence
-  const logs = JSON.parse(localStorage.getItem('appLogs')) || [];
+  const logs = readStoredLogs();
   logs.push(logMessage);
-  localStorage.setItem('appLogs', JSON.stringify(logs));
+  if (logs.length > MAX_LOGS) {
+    logs.splice(0, logs.length - MAX_LOGS);
+  }
+  try {
+    localStorage.setItem('appLogs', JSON.stringify(logs));
+  } catch {
+    // Storage unavailable or quota exceeded - logging must never break callers.
+  }
 };
 
 // Log an error message
@@ -39,10 +66,10 @@ const logError = (error) => {
 const getLogs = () => {
   /**
    * Retrieves all stored log messages.
-   * 
+   *
    * @returns {Array} An array of log messages.
    */
-  return JSON.parse(localStorage.getItem('appLogs')) || [];
+  return readStoredLogs();
 };
 
 module.exports = { log, logError, getLogs };
