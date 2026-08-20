@@ -14,12 +14,18 @@ const readStoredLogs = () => {
   /**
    * Safely reads the persisted log array from localStorage.
    * Returns an empty array if nothing is stored or the value is corrupt.
+   * Enforces the MAX_LOGS cap on read as well, so a legacy/oversized store
+   * (written by an older version or manually tampered) can't return an
+   * unbounded array to callers.
    *
    * @returns {Array} An array of log messages.
    */
   try {
     const stored = JSON.parse(localStorage.getItem('appLogs'));
-    return Array.isArray(stored) ? stored : [];
+    if (!Array.isArray(stored)) {
+      return [];
+    }
+    return stored.length > MAX_LOGS ? stored.slice(-MAX_LOGS) : stored;
   } catch {
     // Corrupt/non-JSON value in storage - start fresh rather than throwing.
     return [];
