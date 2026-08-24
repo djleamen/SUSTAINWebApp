@@ -85,16 +85,21 @@ const App = () => {
     // Check if the input is a math expression and solve it locally
     if (mathOptimizer.recognizeMath(userInput)) {
       const result = mathOptimizer.solveMath(userInput);
-      setMessages(prevMessages => [
-        ...prevMessages,
-        { sender: 'SUSTAIN', text: `Math detected! Result: ${result}`, percentageSaved: 100 }
-      ]);
-  
-      // Update Token Savings
-      setTotalPercentageSaved(prevTotal => prevTotal + 100);
-      setMessageCount(prevCount => prevCount + 1);
-  
-      return;
+      // Only short-circuit when we actually computed a number; solveMath
+      // returns an "Error: ..." string for unparseable input, which should
+      // fall through to the normal API path instead of being shown as a result.
+      if (typeof result === 'number' && Number.isFinite(result)) {
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { sender: 'SUSTAIN', text: `Math detected! Result: ${result}`, percentageSaved: 100 }
+        ]);
+
+        // Update Token Savings
+        setTotalPercentageSaved(prevTotal => prevTotal + 100);
+        setMessageCount(prevCount => prevCount + 1);
+
+        return;
+      }
     }
   
     try {
