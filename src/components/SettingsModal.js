@@ -122,7 +122,7 @@ const SettingsModal = ({ onClose, darkMode, setDarkMode, apiBaseUrl, model, setM
             <br />
             🌱 {co2Savings.totalKwhSaved} kWh of power
             <br />
-            🌍 {co2Savings.totalCo2Saved} metric tons of CO₂ emissions
+            🌍 {co2Savings.totalCo2Saved} kg of CO₂ emissions
           </p>
         )}
       </div>
