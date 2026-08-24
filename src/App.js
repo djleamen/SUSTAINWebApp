@@ -71,19 +71,6 @@ const App = () => {
     };
   }, []);
 
-  const toggleDarkMode = () => {
-    /**
-     * Toggles dark mode state and saves preference to local storage.
-     * 
-     * @param {Function} setDarkMode - Function to set dark mode state.
-     */
-    setDarkMode(prevMode => {
-      const newMode = !prevMode;
-      localStorage.setItem("darkMode", newMode);
-      return newMode;
-    });
-  };
-
   const handleSendMessage = async (userInput) => {
     /**
      * Handles sending user messages to the SUSTAIN API and updating chat state.
@@ -245,7 +232,7 @@ const App = () => {
         <SettingsModal
           onClose={() => setShowSettings(false)}
           darkMode={darkMode}
-          toggleDarkMode={toggleDarkMode}
+          setDarkMode={setDarkMode}
           fetchCo2Savings={fetchCo2Savings}
           co2Savings={co2Savings}
           loadingCo2={loadingCo2}
