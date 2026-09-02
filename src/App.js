@@ -30,8 +30,6 @@ const App = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [co2Savings, setCo2Savings] = useState(null);
-  const [loadingCo2, setLoadingCo2] = useState(false);
   const [model, setModel] = useState('gpt-3.5-turbo'); // should update model default here... is 3.5-turbo still available?
   const [isMobile, setIsMobile] = useState(false);
   // The React build and the Express API deploy together as a single Azure Web
@@ -71,19 +69,6 @@ const App = () => {
     };
   }, []);
 
-  const toggleDarkMode = () => {
-    /**
-     * Toggles dark mode state and saves preference to local storage.
-     * 
-     * @param {Function} setDarkMode - Function to set dark mode state.
-     */
-    setDarkMode(prevMode => {
-      const newMode = !prevMode;
-      localStorage.setItem("darkMode", newMode);
-      return newMode;
-    });
-  };
-
   const handleSendMessage = async (userInput) => {
     /**
      * Handles sending user messages to the SUSTAIN API and updating chat state.
@@ -98,16 +83,21 @@ const App = () => {
     // Check if the input is a math expression and solve it locally
     if (mathOptimizer.recognizeMath(userInput)) {
       const result = mathOptimizer.solveMath(userInput);
-      setMessages(prevMessages => [
-        ...prevMessages,
-        { sender: 'SUSTAIN', text: `Math detected! Result: ${result}`, percentageSaved: 100 }
-      ]);
-  
-      // Update Token Savings
-      setTotalPercentageSaved(prevTotal => prevTotal + 100);
-      setMessageCount(prevCount => prevCount + 1);
-  
-      return;
+      // Only short-circuit when we actually computed a number; solveMath
+      // returns an "Error: ..." string for unparseable input, which should
+      // fall through to the normal API path instead of being shown as a result.
+      if (typeof result === 'number' && Number.isFinite(result)) {
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { sender: 'SUSTAIN', text: `Math detected! Result: ${result}`, percentageSaved: 100 }
+        ]);
+
+        // Update Token Savings
+        setTotalPercentageSaved(prevTotal => prevTotal + 100);
+        setMessageCount(prevCount => prevCount + 1);
+
+        return;
+      }
     }
   
     try {
@@ -170,24 +160,6 @@ const App = () => {
     }
   };
 
-  // Fetch CO₂ Savings
-  const fetchCo2Savings = async () => {
-    setLoadingCo2(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/sustain/co2-savings`);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-      const data = await response.json();
-      setCo2Savings(data);
-      log(`CO₂ savings fetched: ${JSON.stringify(data)}`);
-    } catch (error) {
-      logError(error);
-      console.error("Failed to fetch CO₂ savings:", error);
-    } finally {
-      setLoadingCo2(false);
-    }
-  };
-
   const handleModelChange = (newModel) => {
     /**
      * Handles changes to the selected AI model.
@@ -237,7 +209,7 @@ const App = () => {
       {/* Chat Area & Input */}
       <ChatArea messages={messages} />
       <InputArea className={darkMode ? 'dark-mode' : 'light-mode'} onSendMessage={handleSendMessage} />
-      <TokenSavings averageSavings={averageSavings} co2Savings={co2Savings} />
+      <TokenSavings averageSavings={averageSavings} />
 
       {/* Modals */}
       {showInfo && <InfoModal onClose={() => setShowInfo(false)} darkMode={darkMode} />}
@@ -245,10 +217,7 @@ const App = () => {
         <SettingsModal
           onClose={() => setShowSettings(false)}
           darkMode={darkMode}
-          toggleDarkMode={toggleDarkMode}
-          fetchCo2Savings={fetchCo2Savings}
-          co2Savings={co2Savings}
-          loadingCo2={loadingCo2}
+          setDarkMode={setDarkMode}
           apiBaseUrl={API_BASE_URL}
           model={model}
           setModel={handleModelChange}
