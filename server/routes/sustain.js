@@ -250,17 +250,20 @@ router.post('/', async (req, res) => {
     });
 
     // Guard against malformed responses: an empty choices array (e.g. a
-    // content-filter refusal) or missing content would otherwise throw a
+    // content-filter refusal) or non-string content would otherwise throw a
     // TypeError that masks the real cause in the generic 500 handler.
     const choice = sustainResponse.choices?.[0];
-    const sustainOutputText = choice?.message?.content?.trim();
-    if (!sustainOutputText) {
-      console.error("OpenAI returned no usable content:", JSON.stringify(sustainResponse));
+    const content = choice?.message?.content;
+    if (typeof content !== 'string' || content.trim() === '') {
+      // Log only the finish reason, not the full response, to avoid emitting
+      // potentially sensitive payload data to the logs.
+      console.error(`OpenAI returned no usable content (finish_reason: ${choice?.finish_reason ?? 'unknown'})`);
       return res.status(502).json({
         error: "No response from the language model",
         percentageSaved: 0
       });
     }
+    const sustainOutputText = content.trim();
 
     // Update total tokens saved (Input + Output savings)
     const outputTokens = sustainResponse.usage?.total_tokens ?? 0;
