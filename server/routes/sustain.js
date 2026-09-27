@@ -249,10 +249,22 @@ router.post('/', async (req, res) => {
       max_tokens: MAX_RESPONSE_TOKENS,
     });
 
-    const sustainOutputText = sustainResponse.choices[0].message.content.trim();
+    // Guard against malformed responses: an empty choices array (e.g. a
+    // content-filter refusal) or missing content would otherwise throw a
+    // TypeError that masks the real cause in the generic 500 handler.
+    const choice = sustainResponse.choices?.[0];
+    const sustainOutputText = choice?.message?.content?.trim();
+    if (!sustainOutputText) {
+      console.error("OpenAI returned no usable content:", JSON.stringify(sustainResponse));
+      return res.status(502).json({
+        error: "No response from the language model",
+        percentageSaved: 0
+      });
+    }
 
     // Update total tokens saved (Input + Output savings)
-    const tokensSaved = originalInputLength - optimizedInputLength + sustainResponse.usage.total_tokens;
+    const outputTokens = sustainResponse.usage?.total_tokens ?? 0;
+    const tokensSaved = originalInputLength - optimizedInputLength + outputTokens;
     totalTokensSaved += tokensSaved;
 
     // Calculate energy and CO₂ savings
