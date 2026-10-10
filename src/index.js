@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import './App.css';
 
@@ -19,13 +19,15 @@ log('Application has started');
 log('Logging system is operational');
 
 try {
-  ReactDOM.render(
+  // React 18+ removed ReactDOM.render; use the createRoot API (react-dom
+  // and react are pinned to v19, where ReactDOM.render no longer exists).
+  const root = createRoot(document.getElementById('root'));
+  root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
   );
-  log('ReactDOM.render executed successfully');
+  log('React root rendered successfully');
 } catch (error) {
   logError(error);
 }
