@@ -67,6 +67,14 @@ let totalTokensSaved = 0;
 // Function to escape special characters in a string for regex
 const escapeRegex = (phrase) => phrase.replaceAll(/[-/\\^$*+?.()|[\]{}]/g, String.raw`\$&`);
 
+// Count whitespace-separated words, treating an empty/whitespace-only string
+// as 0 (''.split(/\s+/) returns [''], i.e. length 1, which would otherwise
+// miscount a fully optimized-away prompt as one remaining word).
+const countWords = (text) => {
+  const trimmed = text.trim();
+  return trimmed === '' ? 0 : trimmed.split(/\s+/).length;
+};
+
 const applyContractions = (text) => {
   /**
    * Applies common English contractions to the input text to reduce token count.
@@ -203,7 +211,7 @@ router.post('/', async (req, res) => {
         percentageSaved: 100 // Assuming 100% token savings for math optimizations
       });
     }
-    const originalInputLength = sanitizedInput.split(/\s+/).length;
+    const originalInputLength = countWords(sanitizedInput);
     let optimizedInput = sanitizedInput;
 
     // Apply contractions and replacements
@@ -218,10 +226,12 @@ router.post('/', async (req, res) => {
       }
     }
 
-    const optimizedInputLength = optimizedInput.split(/\s+/).length;
+    const optimizedInputLength = countWords(optimizedInput);
 
-    // Estimate token savings
-    const inputSavings = ((originalInputLength - optimizedInputLength) / originalInputLength) * 100;
+    // Estimate token savings (guard against an empty original to avoid NaN)
+    const inputSavings = originalInputLength > 0
+      ? ((originalInputLength - optimizedInputLength) / originalInputLength) * 100
+      : 0;
     const totalSavings = Number(inputSavings.toFixed(2));
 
     // Determine energy consumption per token for the selected model

@@ -19,8 +19,9 @@ log('Application has started');
 log('Logging system is operational');
 
 try {
-  // React 18+ removed ReactDOM.render; use the createRoot API (react-dom
-  // and react are pinned to v19, where ReactDOM.render no longer exists).
+  // React 18 deprecated ReactDOM.render and React 19 removed it; use the
+  // createRoot API (react and react-dom are pinned to v19, where
+  // ReactDOM.render no longer exists).
   const root = createRoot(document.getElementById('root'));
   root.render(
     <React.StrictMode>
