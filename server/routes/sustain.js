@@ -265,9 +265,11 @@ router.post('/', async (req, res) => {
     }
     const sustainOutputText = content.trim();
 
-    // Update total tokens saved (Input + Output savings)
-    const outputTokens = sustainResponse.usage?.total_tokens ?? 0;
-    const tokensSaved = originalInputLength - optimizedInputLength + outputTokens;
+    // Update total tokens saved: the words removed from the prompt by
+    // optimization (consistent with the percentageSaved calculation above).
+    // usage.total_tokens is tokens *consumed* by the call, not saved, so
+    // adding it here inflated totalTokensSaved on every request.
+    const tokensSaved = originalInputLength - optimizedInputLength;
     totalTokensSaved += tokensSaved;
 
     // Calculate energy and CO₂ savings
