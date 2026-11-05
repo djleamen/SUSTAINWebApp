@@ -24,7 +24,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
     "cross-env": "^10.1.0",
-    "eslint": "^10.13.0",
+    "eslint": "^10.14.0",
     "eslint-plugin-react": "^7.37.5"
   },
   "browserslist": {
@@ -38,5 +38,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "overrides": {
+    "minimatch@>=10.0.0 <11.0.1": "^11.0.4",
+    "@eslint/config-array": {
+      "minimatch": "^11.0.4"
+    }
   }
 }
